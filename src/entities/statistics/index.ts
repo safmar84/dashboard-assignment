@@ -1,4 +1,5 @@
 export { adaptStatisticsOverview } from './api/statistics.adapters'
+export { statisticsOverviewQueryOptions } from './api/statistics.queries'
 export type { StatisticsOverviewDto } from './api/statistics.schemas'
 export { statisticsOverviewDtoSchema } from './api/statistics.schemas'
 export { statisticsOverviewFixture } from './mock/statistics.fixtures'

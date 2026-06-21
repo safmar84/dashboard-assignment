@@ -1,14 +1,15 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import {
-  adaptDevicesIndex,
-  devicesIndexFixture,
+  devicesListQueryOptions,
   formatDeviceStatus,
 } from '../../entities/device'
 import { Card } from '../../shared/ui/card/Card'
 import { StatusBadge } from '../../shared/ui/status-badge/StatusBadge'
 
 export function DevicesListPage() {
-  const devices = adaptDevicesIndex(devicesIndexFixture)
+  const devicesQuery = useQuery(devicesListQueryOptions())
+  const devices = devicesQuery.data
 
   return (
     <section className="page-shell">
@@ -24,11 +25,15 @@ export function DevicesListPage() {
 
       <Card
         title="Planned columns"
-        description={`Device, user, status, and last event/updated. Boundary currently maps page ${devices.page} of ${devices.totalPages}.`}
+        description={
+          devices
+            ? `Device, user, status, and last event/updated. Query currently resolves page ${devices.page} of ${devices.totalPages}.`
+            : 'Devices query is wired; next step replaces the placeholder with the first real desktop list.'
+        }
       />
 
       <div className="placeholder-list">
-        {devices.items.map((device) => (
+        {(devices?.items ?? []).map((device) => (
           <Link
             key={device.id}
             to={`/devices/${device.id}`}

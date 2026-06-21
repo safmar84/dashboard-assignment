@@ -1,9 +1,11 @@
+import { useQuery } from '@tanstack/react-query'
 import { Button } from '../../shared/ui/button/Button'
 import { Card } from '../../shared/ui/card/Card'
-import { adaptStatisticsOverview, statisticsOverviewFixture } from '../../entities/statistics'
+import { statisticsOverviewQueryOptions } from '../../entities/statistics'
 
 export function DashboardPage() {
-  const statistics = adaptStatisticsOverview(statisticsOverviewFixture)
+  const statisticsQuery = useQuery(statisticsOverviewQueryOptions())
+  const statistics = statisticsQuery.data
 
   return (
     <section className="page-shell">
@@ -19,15 +21,27 @@ export function DashboardPage() {
       <div className="placeholder-grid">
         <Card
           title="Statistics summary"
-          description={`Prepared through the API boundary: ${statistics.totalDevices} devices across ${statistics.totalUsers} users.`}
+          description={
+            statistics
+              ? `Served through TanStack Query: ${statistics.totalDevices} devices across ${statistics.totalUsers} users.`
+              : 'Waiting for statistics query result.'
+          }
         />
         <Card
           title="Status breakdown"
-          description={`${statistics.activeDevices} active, ${statistics.expiredDevices} expired, ${statistics.removedDevices} removed.`}
+          description={
+            statistics
+              ? `${statistics.activeDevices} active, ${statistics.expiredDevices} expired, ${statistics.removedDevices} removed.`
+              : 'Status totals will render once the overview query resolves.'
+          }
         />
         <Card
           title="Navigation shortcut"
-          description="Reserved for links into operational views such as devices and detail pages."
+          description={
+            statisticsQuery.isSuccess
+              ? 'Query layer is ready; next slices can build real route content on top of it.'
+              : 'Query layer is wired but the page is still intentionally a placeholder.'
+          }
         >
           <div style={{ marginTop: '1rem' }}>
             <Button size="sm" to="/devices" variant="secondary">

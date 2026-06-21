@@ -99,6 +99,7 @@ The repository now contains:
 - shared UI primitives: `Button`, `Card`, `StatusBadge`
 - prepared API boundary with Zod schemas, endpoint config, and adapters
 - first focused adapter tests using Vitest
+- TanStack Query provider and entity query helpers over mock server-state
 - lightweight FSD-inspired folder split for `app` and `pages`
 
-The next step is to add TanStack Query and wire the server-state setup.
+The next step is to replace the placeholder devices screen with the first real desktop slice.

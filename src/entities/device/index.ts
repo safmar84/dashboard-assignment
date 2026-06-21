@@ -1,4 +1,5 @@
 export { adaptDeviceDetail, adaptDevicesIndex } from './api/device.adapters'
+export { deviceDetailQueryOptions, devicesListQueryOptions } from './api/device.queries'
 export type {
   DeviceDetailDto,
   DeviceEventDto,

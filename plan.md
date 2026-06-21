@@ -18,19 +18,19 @@
 - Done: design foundations and shared primitives
 - Done: API boundary with Zod schemas and adapters
 - Done: first tests for pure data logic
+- Done: TanStack Query and server-state setup
 
 ## Commit Plan
 
-1. Add TanStack Query and server-state setup
-2. Implement Devices List desktop slice
-3. Add sorting and status filtering
-4. Add mobile card representation for Devices List
-5. Add localStorage persistence for sort and filter
-6. Implement Device Detail page
-7. Implement Dashboard page
-8. Polish responsiveness and interaction ergonomics
-9. Finalize README
-10. Remove this `plan.md`
+1. Implement Devices List desktop slice
+2. Add sorting and status filtering
+3. Add mobile card representation for Devices List
+4. Add localStorage persistence for sort and filter
+5. Implement Device Detail page
+6. Implement Dashboard page
+7. Polish responsiveness and interaction ergonomics
+8. Finalize README
+9. Remove this `plan.md`
 
 ## Notes for Final Review
 
