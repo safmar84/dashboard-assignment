@@ -114,7 +114,8 @@ The repository now contains:
 - first real desktop `Devices List` slice with loading, error, empty, and table states
 - lightweight sorting and single status filtering on the devices screen
 - persisted devices list sort/filter preferences in localStorage
+- real `Device Detail` slice with metadata cards and event timeline from the hosted API
 - dedicated mobile card representation and collapsible controls for the devices screen
 - lightweight FSD-inspired folder split for `app` and `pages`
 
-The next step is to implement the `Device Detail` page as a fuller real slice.
+The next step is to implement the `Dashboard` page as a fuller real slice.

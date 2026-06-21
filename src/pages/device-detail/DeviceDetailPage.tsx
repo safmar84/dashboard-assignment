@@ -7,6 +7,24 @@ import {
 import { Button } from '../../shared/ui/button/Button'
 import { Card } from '../../shared/ui/card/Card'
 import { StatusBadge } from '../../shared/ui/status-badge/StatusBadge'
+import './device-detail.css'
+
+const dateTimeFormatter = new Intl.DateTimeFormat('en-GB', {
+  dateStyle: 'medium',
+  timeStyle: 'short',
+})
+
+function formatDateTime(value: string | null) {
+  if (!value) {
+    return 'Not available'
+  }
+
+  return dateTimeFormatter.format(new Date(value))
+}
+
+function formatBiometry(value: boolean) {
+  return value ? 'Enabled' : 'Disabled'
+}
 
 export function DeviceDetailPage() {
   const { deviceId } = useParams()
@@ -14,63 +32,169 @@ export function DeviceDetailPage() {
   const detailQuery = useQuery(deviceDetailQueryOptions(resolvedDeviceId))
   const detail = detailQuery.data
 
+  if (detailQuery.isLoading) {
+    return (
+      <section className="page-shell">
+        <header className="page-header">
+          <p className="page-kicker">Device detail route</p>
+          <h2>Loading device detail</h2>
+          <p>The selected device is being resolved from the hosted API detail endpoint.</p>
+        </header>
+
+        <Button to="/devices" variant="secondary">
+          Back to devices
+        </Button>
+
+        <div className="device-detail__grid device-detail__grid--summary">
+          <Card title="Device summary" description="Waiting for normalized identity and status data." />
+          <Card title="Owner and security" description="Owner, app version, OS version, and biometry will appear here." />
+          <Card title="Activity" description="Creation date, last activity, and event count are loading." />
+        </div>
+      </section>
+    )
+  }
+
+  if (detailQuery.isError || !detail) {
+    return (
+      <section className="page-shell">
+        <header className="page-header">
+          <p className="page-kicker">Device detail route</p>
+          <h2>Unable to load device detail</h2>
+          <p>
+            The route is wired correctly, but the current device detail payload could not be
+            resolved for <code>{resolvedDeviceId}</code>.
+          </p>
+        </header>
+
+        <div className="device-detail__actions">
+          <Button to="/devices" variant="secondary">
+            Back to devices
+          </Button>
+          <Button onClick={() => detailQuery.refetch()} size="sm">
+            Retry query
+          </Button>
+        </div>
+
+        <Card
+          title="Query failure"
+          description="Check the route parameter or retry the hosted mock API request."
+        />
+      </section>
+    )
+  }
+
   return (
     <section className="page-shell">
       <header className="page-header">
         <p className="page-kicker">Device detail route</p>
-        <h2>Device detail placeholder</h2>
+        <h2>{detail.model}</h2>
         <p>
-          This route is already parameterized. It will later render normalized device data and
-          an event timeline for the selected device <code>{resolvedDeviceId}</code>.
+          Detail now renders a real device slice from the hosted API: identity, owner context,
+          security metadata, and a normalized event timeline for <code>{resolvedDeviceId}</code>.
         </p>
       </header>
 
-      <Button to="/devices" variant="secondary">
-        Back to devices
-      </Button>
+      <div className="device-detail__actions">
+        <Button to="/devices" variant="secondary">
+          Back to devices
+        </Button>
+        <StatusBadge label={formatDeviceStatus(detail.status)} />
+      </div>
 
-      <div className="placeholder-meta">
-        <Card
-          title="Device identity"
-          description={
-            detail
-              ? `${detail.model}${detail.platform ? ` · ${detail.platform}` : ''}`
-              : 'Waiting for device detail query result.'
-          }
-        >
-          <div style={{ marginTop: '1rem' }}>
-            {detail ? <StatusBadge label={formatDeviceStatus(detail.status)} /> : null}
+      <Card
+        title={`${detail.vendor} ${detail.model}`}
+        description={`${detail.platform ?? 'Unknown platform'} · ${detail.shortId} · ${detail.id}`}
+      >
+        <dl className="device-detail__facts">
+          <div>
+            <dt>User</dt>
+            <dd>{detail.owner.name}</dd>
           </div>
-        </Card>
-        <Card
-          title="Owner context"
-          description={
-            detail
-              ? `${detail.owner.name} · ${detail.owner.id}`
-              : 'Owner information will be filled from the normalized detail query.'
-          }
-        />
-      </div>
+          <div>
+            <dt>User ID</dt>
+            <dd>{detail.owner.id}</dd>
+          </div>
+          <div>
+            <dt>Events</dt>
+            <dd>{detail.events.length}</dd>
+          </div>
+        </dl>
+      </Card>
 
-      <div className="placeholder-stack">
-        <Card
-          title="Timeline preview"
-          description={
-            detailQuery.isSuccess && detail
-              ? `Query currently maps ${detail.events.length} normalized events for the selected device.`
-              : 'Timeline is wired through the query layer and ready for the dedicated detail slice.'
-          }
-        />
-
-        <div className="placeholder-timeline">
-          {(detail?.events ?? []).map((event) => (
-            <div key={event.id} className="placeholder-timeline__item">
-              <strong>{event.label}</strong>
-              <span>{event.description ?? event.occurredAt}</span>
+      <div className="device-detail__grid device-detail__grid--summary">
+        <Card title="App and security">
+          <dl className="device-detail__facts">
+            <div>
+              <dt>App version</dt>
+              <dd>{detail.appVersion ?? 'Not available'}</dd>
             </div>
-          ))}
-        </div>
+            <div>
+              <dt>OS version</dt>
+              <dd>{detail.osVersion ?? 'Not available'}</dd>
+            </div>
+            <div>
+              <dt>Biometry</dt>
+              <dd>{formatBiometry(detail.biometryEnabled)}</dd>
+            </div>
+          </dl>
+        </Card>
+
+        <Card title="Lifecycle">
+          <dl className="device-detail__facts">
+            <div>
+              <dt>Created</dt>
+              <dd>{formatDateTime(detail.createdAt)}</dd>
+            </div>
+            <div>
+              <dt>Last active</dt>
+              <dd>{formatDateTime(detail.lastActiveAt)}</dd>
+            </div>
+          </dl>
+        </Card>
+
+        <Card title="Owner context">
+          <dl className="device-detail__facts">
+            <div>
+              <dt>Name</dt>
+              <dd>{detail.owner.name}</dd>
+            </div>
+            <div>
+              <dt>Identifier</dt>
+              <dd>{detail.owner.id}</dd>
+            </div>
+            <div>
+              <dt>Platform</dt>
+              <dd>{detail.platform ?? 'Not available'}</dd>
+            </div>
+          </dl>
+        </Card>
       </div>
+
+      <Card
+        title="Activity timeline"
+        description={`The hosted mock API currently returns ${detail.events.length} normalized events for this device.`}
+      >
+        {detail.events.length === 0 ? (
+          <p className="device-detail__empty">No events are available for this device yet.</p>
+        ) : (
+          <div className="device-detail__timeline">
+            {[...detail.events]
+              .sort(
+                (left, right) =>
+                  new Date(right.occurredAt).getTime() - new Date(left.occurredAt).getTime(),
+              )
+              .map((event) => (
+                <article key={event.id} className="device-detail__timeline-item">
+                  <div className="device-detail__timeline-head">
+                    <strong>{event.label}</strong>
+                    <time dateTime={event.occurredAt}>{formatDateTime(event.occurredAt)}</time>
+                  </div>
+                  <p>{event.description ?? 'No additional event context available.'}</p>
+                </article>
+              ))}
+          </div>
+        )}
+      </Card>
     </section>
   )
 }

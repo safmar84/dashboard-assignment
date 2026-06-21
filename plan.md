@@ -23,14 +23,14 @@
 - Done: sorting and status filtering
 - Done: mobile card representation for Devices List
 - Done: localStorage persistence for devices list controls
+- Done: real Device Detail page
 
 ## Commit Plan
 
-1. Implement Device Detail page
-2. Implement Dashboard page
-3. Polish responsiveness and interaction ergonomics
-4. Finalize README
-5. Remove this `plan.md`
+1. Implement Dashboard page
+2. Polish responsiveness and interaction ergonomics
+3. Finalize README
+4. Remove this `plan.md`
 
 ## Notes for Final Review
 
