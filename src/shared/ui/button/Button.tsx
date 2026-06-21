@@ -43,19 +43,41 @@ export function Button(props: ButtonProps) {
   const composedClassName = getClassName({ className, size, variant })
 
   if (isLinkButton(props)) {
-    const { to, ...linkProps } = props
+    const linkProps = { ...props } as Partial<ButtonAsLinkProps>
+    const to = props.to
+
+    delete linkProps.children
+    delete linkProps.className
+    delete linkProps.size
+    delete linkProps.variant
+    delete linkProps.to
 
     return (
-      <Link className={composedClassName} to={to} {...linkProps}>
+      <Link
+        className={composedClassName}
+        to={to}
+        {...(linkProps as Omit<ButtonAsLinkProps, keyof ButtonBaseProps | 'to'>)}
+      >
         {children}
       </Link>
     )
   }
 
-  const { type = 'button', ...buttonProps } = props
+  const buttonProps = { ...props } as Partial<ButtonAsButtonProps>
+  const type = props.type ?? 'button'
+
+  delete buttonProps.children
+  delete buttonProps.className
+  delete buttonProps.size
+  delete buttonProps.variant
+  delete buttonProps.type
 
   return (
-    <button className={composedClassName} type={type} {...buttonProps}>
+    <button
+      className={composedClassName}
+      type={type}
+      {...(buttonProps as Omit<ButtonAsButtonProps, keyof ButtonBaseProps | 'type'>)}
+    >
       {children}
     </button>
   )

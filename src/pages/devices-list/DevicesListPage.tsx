@@ -146,6 +146,20 @@ export function DevicesListPage() {
         />
       ) : null}
 
+      <div className="devices-cards" hidden={visibleDevices.length === 0}>
+        {visibleDevices.map((device) => (
+          <Link key={device.id} to={`/devices/${device.id}`} className="devices-card">
+            <div className="devices-card__header">
+              <div className="devices-card__summary">
+                <strong>{device.model}</strong>
+                <span className="devices-card__owner">{device.ownerName}</span>
+              </div>
+              <StatusBadge label={formatDeviceStatus(device.status)} />
+            </div>
+          </Link>
+        ))}
+      </div>
+
       <div className="devices-table-shell" hidden={visibleDevices.length === 0}>
         <table className="devices-table">
           <thead>

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Button } from '../../../shared/ui/button/Button'
 import type {
   DevicesSortOption,
@@ -24,19 +25,33 @@ export function DevicesListToolbar({
   onSortOptionChange,
   onReset,
 }: DevicesListToolbarProps) {
+  const [isMobileExpanded, setIsMobileExpanded] = useState(false)
   const hasCustomControls =
     statusFilter !== 'all' || sortOption !== 'last-active-desc'
 
   return (
     <div className="devices-toolbar">
-      <div className="devices-toolbar__summary">
-        <strong>{visibleCount}</strong>
-        <span>
-          of {totalCount} devices shown
-        </span>
+      <div className="devices-toolbar__topline">
+        <div className="devices-toolbar__summary">
+          <strong>{visibleCount}</strong>
+          <span>
+            of {totalCount} devices shown
+          </span>
+        </div>
+
+        <Button
+          size="sm"
+          variant="secondary"
+          className="devices-toolbar__toggle"
+          onClick={() => setIsMobileExpanded((current) => !current)}
+        >
+          {isMobileExpanded ? 'Hide filters' : 'Show filters'}
+        </Button>
       </div>
 
-      <div className="devices-toolbar__controls">
+      <div
+        className={`devices-toolbar__controls${isMobileExpanded ? ' devices-toolbar__controls--expanded' : ''}`}
+      >
         <label className="devices-toolbar__field">
           <span>Status</span>
           <select

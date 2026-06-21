@@ -21,16 +21,16 @@
 - Done: TanStack Query and server-state setup
 - Done: Devices List desktop slice
 - Done: sorting and status filtering
+- Done: mobile card representation for Devices List
 
 ## Commit Plan
 
-1. Add mobile card representation for Devices List
-2. Add localStorage persistence for sort and filter
-3. Implement Device Detail page
-4. Implement Dashboard page
-5. Polish responsiveness and interaction ergonomics
-6. Finalize README
-7. Remove this `plan.md`
+1. Add localStorage persistence for sort and filter
+2. Implement Device Detail page
+3. Implement Dashboard page
+4. Polish responsiveness and interaction ergonomics
+5. Finalize README
+6. Remove this `plan.md`
 
 ## Notes for Final Review
 
