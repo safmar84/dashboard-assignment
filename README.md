@@ -11,6 +11,21 @@ Build a small, explainable dashboard application over a REST API with:
 - responsive UI with strong mobile usability on key screens,
 - decisions that are easy to defend during a technical interview.
 
+## Requirement Check
+
+Compared with the assignment PDF, the current implementation covers the requested core scope:
+
+- **Basic React app:** Vite + React + TypeScript
+- **Routing:** 3 pages connected with React Router (`Dashboard`, `Devices`, `Device Detail`)
+- **Charts + KPIs:** dashboard KPI cards plus a hand-rolled status distribution chart
+- **Table:** devices list table with multiple rows of data
+- **Networking over HTTP:** hosted Wultra mock API via real fetch requests
+- **Loading and error states:** implemented for all main routes
+- **Local storage:** persisted devices list sorting and filtering
+- **Visual identity:** dark baseline with blue `#09f` accent inspired by Wultra
+
+The assignment also mentions a possible 4th page (`Users` or `Settings`) as an example rather than a strict requirement, so this solution intentionally stays with 3 focused pages.
+
 ## Intended Scope
 
 The app is intentionally small and focused:
@@ -115,27 +130,39 @@ Production build:
 npm run build
 ```
 
-## Current Status
+## Technical Decisions
 
-The repository now contains:
+- **Vite over heavier setup:** fast iteration and minimal scaffolding for a small SPA
+- **React Router + TanStack Query:** enough structure for route composition and remote data without over-engineering
+- **Typed API boundary with Zod adapters:** keeps backend payload quirks away from page components
+- **Lightweight FSD-inspired split:** enough separation to talk clearly about ownership and extension points
+- **Full-dataset devices list controls:** the mock API does not provide server-side sorting/filtering, so the app loads the full devices dataset and keeps filtering, sorting, and pagination globally consistent
+- **Hand-rolled chart instead of extra library:** keeps dependency count low while still satisfying the “table + chart” requirement
+
+## What Is Implemented
+
+The repository contains:
 
 - Vite + React + TypeScript bootstrap
-- initial app shell
-- basic route structure for `Dashboard`, `Devices List`, and `Device Detail`
-- initial design foundations based on shared tokens
-- shared UI primitives: `Button`, `Card`, `StatusBadge`
-- prepared API boundary with Zod schemas, endpoint config, and adapters
-- first focused adapter tests using Vitest
+- app shell with primary navigation
+- `Dashboard`, `Devices List`, and `Device Detail` routes
+- KPI overview and status distribution chart on the dashboard
+- sortable/filterable devices list with local client-side pagination
+- device detail with metadata and event timeline
+- shared UI primitives (`Button`, `Card`, `StatusBadge`)
+- typed API boundary with endpoint config, schemas, and adapters
 - mock fixtures runtime-validated with Zod on import
-- TanStack Query provider and entity query helpers over the hosted mock API
-- first real desktop `Devices List` slice with loading, error, empty, and table states
-- lightweight sorting and single status filtering on the devices screen
+- TanStack Query provider and query helpers over the hosted mock API
+- loading, error, and empty states on the main pages
 - client-side devices pagination over the full aggregated dataset
 - persisted devices list sort/filter preferences in localStorage
-- real `Device Detail` slice with metadata cards and event timeline from the hosted API
-- real `Dashboard` slice with KPI cards and status distribution from statistics data
-- dedicated mobile card representation and collapsible controls for the devices screen
-- responsive polish across key routes, including clearer page-local devices counts and mobile action layouts
+- responsive mobile card representation and collapsible controls for the devices screen
+- responsive polish across the key routes
 - lightweight FSD-inspired folder split for `app` and `pages`
 
-The next step is to finalize the README and remove the temporary in-repo plan document.
+## If I Had More Time
+
+- optimize the devices list bootstrap by using explicit `page-N.json` endpoints for faster first paint
+- add a dedicated `Users` or `Settings` page as an optional 4th route
+- deepen route-level tests for key interactive flows
+- refine dashboard visualizations and device list ergonomics further
