@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Button } from '../../shared/ui/button/Button'
 
 export function NotFoundPage() {
   return (
@@ -9,9 +9,9 @@ export function NotFoundPage() {
         <p>The current route is outside the planned assignment scope.</p>
       </header>
 
-      <Link className="not-found-link" to="/">
+      <Button to="/" variant="secondary">
         Return to dashboard
-      </Link>
+      </Button>
     </section>
   )
 }

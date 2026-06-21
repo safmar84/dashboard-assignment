@@ -1,3 +1,6 @@
+import { Button } from '../../shared/ui/button/Button'
+import { Card } from '../../shared/ui/card/Card'
+
 export function DashboardPage() {
   return (
     <section className="page-shell">
@@ -11,18 +14,24 @@ export function DashboardPage() {
       </header>
 
       <div className="placeholder-grid">
-        <article className="placeholder-card">
-          <h3>Statistics summary</h3>
-          <p>Reserved for aggregate metrics fetched from the statistics endpoint.</p>
-        </article>
-        <article className="placeholder-card">
-          <h3>Status breakdown</h3>
-          <p>Reserved for a simple chart focused on device status distribution.</p>
-        </article>
-        <article className="placeholder-card">
-          <h3>Navigation shortcut</h3>
-          <p>Reserved for links into operational views such as devices and detail pages.</p>
-        </article>
+        <Card
+          title="Statistics summary"
+          description="Reserved for aggregate metrics fetched from the statistics endpoint."
+        />
+        <Card
+          title="Status breakdown"
+          description="Reserved for a simple chart focused on device status distribution."
+        />
+        <Card
+          title="Navigation shortcut"
+          description="Reserved for links into operational views such as devices and detail pages."
+        >
+          <div style={{ marginTop: '1rem' }}>
+            <Button size="sm" to="/devices" variant="secondary">
+              Open devices route
+            </Button>
+          </div>
+        </Card>
       </div>
     </section>
   )

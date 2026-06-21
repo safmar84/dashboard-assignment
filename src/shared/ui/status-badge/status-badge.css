@@ -1,0 +1,36 @@
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.status-badge--active {
+  border-color: rgba(34, 197, 94, 0.3);
+  background: var(--color-status-active-soft);
+  color: var(--color-status-active);
+}
+
+.status-badge--expired {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: var(--color-status-expired-soft);
+  color: var(--color-status-expired);
+}
+
+.status-badge--removed {
+  border-color: rgba(248, 113, 113, 0.3);
+  background: var(--color-status-removed-soft);
+  color: var(--color-status-removed);
+}
+
+.status-badge--neutral {
+  border-color: rgba(148, 163, 184, 0.3);
+  background: var(--color-status-neutral-soft);
+  color: var(--color-status-neutral);
+}

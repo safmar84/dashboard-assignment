@@ -1,4 +1,7 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { Button } from '../../shared/ui/button/Button'
+import { Card } from '../../shared/ui/card/Card'
+import { StatusBadge } from '../../shared/ui/status-badge/StatusBadge'
 
 const timelinePreview = [
   { label: 'Activation', detail: 'Device enrolled successfully' },
@@ -20,26 +23,30 @@ export function DeviceDetailPage() {
         </p>
       </header>
 
-      <Link className="context-link" to="/devices">
+      <Button to="/devices" variant="secondary">
         Back to devices
-      </Link>
+      </Button>
 
       <div className="placeholder-meta">
-        <article className="placeholder-panel">
-          <h3>Device identity</h3>
-          <p>Reserved for model, status, and activation metadata.</p>
-        </article>
-        <article className="placeholder-panel">
-          <h3>Owner context</h3>
-          <p>Reserved for the owning user and related account information.</p>
-        </article>
+        <Card
+          title="Device identity"
+          description="Reserved for model, status, and activation metadata."
+        >
+          <div style={{ marginTop: '1rem' }}>
+            <StatusBadge label="Active" />
+          </div>
+        </Card>
+        <Card
+          title="Owner context"
+          description="Reserved for the owning user and related account information."
+        />
       </div>
 
       <div className="placeholder-stack">
-        <article className="placeholder-panel">
-          <h3>Timeline preview</h3>
-          <p>Reserved for the event history delivered by the device detail endpoint.</p>
-        </article>
+        <Card
+          title="Timeline preview"
+          description="Reserved for the event history delivered by the device detail endpoint."
+        />
 
         <div className="placeholder-timeline">
           {timelinePreview.map((event) => (

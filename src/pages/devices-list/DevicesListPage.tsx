@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import { Card } from '../../shared/ui/card/Card'
+import { StatusBadge } from '../../shared/ui/status-badge/StatusBadge'
 
 const placeholderDevices = [
   { id: 'demo-device', name: 'iPhone 15 Pro', owner: 'Jane Doe', status: 'Active' },
@@ -19,10 +21,10 @@ export function DevicesListPage() {
         </p>
       </header>
 
-      <div className="placeholder-panel">
-        <h3>Planned columns</h3>
-        <p>Device, user, status, and last event/updated.</p>
-      </div>
+      <Card
+        title="Planned columns"
+        description="Device, user, status, and last event/updated."
+      />
 
       <div className="placeholder-list">
         {placeholderDevices.map((device) => (
@@ -31,11 +33,11 @@ export function DevicesListPage() {
             to={`/devices/${device.id}`}
             className="placeholder-list__item"
           >
-            <div>
+            <div className="placeholder-list__meta">
               <strong>{device.name}</strong>
               <span>{device.owner}</span>
             </div>
-            <span>{device.status}</span>
+            <StatusBadge label={device.status} />
           </Link>
         ))}
       </div>

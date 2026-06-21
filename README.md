@@ -73,6 +73,8 @@ The repository now contains:
 - Vite + React + TypeScript bootstrap
 - initial app shell
 - basic route structure for `Dashboard`, `Devices List`, and `Device Detail`
+- initial design foundations based on shared tokens
+- shared UI primitives: `Button`, `Card`, `StatusBadge`
 - lightweight FSD-inspired folder split for `app` and `pages`
 
-The next step is to add the first design foundations and shared UI primitives.
+The next step is to add the API boundary with typed schemas and adapters.
