@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import type { DeviceStatus, DeviceSummary } from '../../../entities/device'
 
 export type DevicesStatusFilter = 'all' | DeviceStatus
@@ -10,6 +11,32 @@ export type DevicesSortOption =
 
 export const defaultDevicesStatusFilter: DevicesStatusFilter = 'all'
 export const defaultDevicesSortOption: DevicesSortOption = 'last-active-desc'
+export const devicesListControlsStorageKey = 'devices-list-controls'
+
+export type DevicesListControlsState = {
+  statusFilter: DevicesStatusFilter
+  sortOption: DevicesSortOption
+}
+
+export const defaultDevicesListControlsState: DevicesListControlsState = {
+  statusFilter: defaultDevicesStatusFilter,
+  sortOption: defaultDevicesSortOption,
+}
+
+const devicesStatusFilterSchema = z.enum(['all', 'active', 'blocked', 'expired', 'removed'])
+const devicesSortOptionSchema = z.enum([
+  'last-active-desc',
+  'last-active-asc',
+  'model-asc',
+  'owner-asc',
+])
+const devicesListControlsStateSchema = z.object({
+  statusFilter: devicesStatusFilterSchema,
+  sortOption: devicesSortOptionSchema,
+})
+
+type StorageReader = Pick<Storage, 'getItem'>
+type StorageWriter = Pick<Storage, 'setItem'>
 
 function compareText(left: string, right: string) {
   return left.localeCompare(right, 'cs')
@@ -48,4 +75,35 @@ export function filterAndSortDevices(
         return compareText(left.ownerName, right.ownerName)
     }
   })
+}
+
+export function readDevicesListControls(storage: StorageReader | null | undefined) {
+  const rawValue = storage?.getItem(devicesListControlsStorageKey)
+
+  if (!rawValue) {
+    return defaultDevicesListControlsState
+  }
+
+  let parsedValue: unknown
+
+  try {
+    parsedValue = JSON.parse(rawValue)
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      return defaultDevicesListControlsState
+    }
+
+    throw error
+  }
+
+  const parsedControls = devicesListControlsStateSchema.safeParse(parsedValue)
+
+  return parsedControls.success ? parsedControls.data : defaultDevicesListControlsState
+}
+
+export function persistDevicesListControls(
+  storage: StorageWriter | null | undefined,
+  value: DevicesListControlsState,
+) {
+  storage?.setItem(devicesListControlsStorageKey, JSON.stringify(value))
 }

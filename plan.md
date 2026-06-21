@@ -22,15 +22,15 @@
 - Done: Devices List desktop slice
 - Done: sorting and status filtering
 - Done: mobile card representation for Devices List
+- Done: localStorage persistence for devices list controls
 
 ## Commit Plan
 
-1. Add localStorage persistence for sort and filter
-2. Implement Device Detail page
-3. Implement Dashboard page
-4. Polish responsiveness and interaction ergonomics
-5. Finalize README
-6. Remove this `plan.md`
+1. Implement Device Detail page
+2. Implement Dashboard page
+3. Polish responsiveness and interaction ergonomics
+4. Finalize README
+5. Remove this `plan.md`
 
 ## Notes for Final Review
 

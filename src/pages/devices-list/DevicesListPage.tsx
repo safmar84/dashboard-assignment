@@ -1,16 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   devicesListQueryOptions,
   formatDeviceStatus,
 } from '../../entities/device'
 import {
-  defaultDevicesSortOption,
-  defaultDevicesStatusFilter,
   filterAndSortDevices,
-  type DevicesSortOption,
-  type DevicesStatusFilter,
+  defaultDevicesListControlsState,
+  persistDevicesListControls,
+  readDevicesListControls,
 } from '../../features/devices-list-controls/model/devices-list-controls'
 import { DevicesListToolbar } from '../../features/devices-list-controls/ui/DevicesListToolbar'
 import { Button } from '../../shared/ui/button/Button'
@@ -34,10 +33,17 @@ function formatLastEvent(dateTime: string | null) {
 export function DevicesListPage() {
   const devicesQuery = useQuery(devicesListQueryOptions())
   const devices = devicesQuery.data
-  const [statusFilter, setStatusFilter] =
-    useState<DevicesStatusFilter>(defaultDevicesStatusFilter)
-  const [sortOption, setSortOption] =
-    useState<DevicesSortOption>(defaultDevicesSortOption)
+  const [controls, setControls] = useState(() =>
+    readDevicesListControls(typeof window === 'undefined' ? null : window.localStorage),
+  )
+  const { statusFilter, sortOption } = controls
+
+  useEffect(() => {
+    persistDevicesListControls(
+      typeof window === 'undefined' ? null : window.localStorage,
+      controls,
+    )
+  }, [controls])
 
   const visibleDevices = useMemo(
     () =>
@@ -131,11 +137,14 @@ export function DevicesListPage() {
         sortOption={sortOption}
         visibleCount={visibleDevices.length}
         totalCount={devices.items.length}
-        onStatusFilterChange={setStatusFilter}
-        onSortOptionChange={setSortOption}
+        onStatusFilterChange={(value) =>
+          setControls((current) => ({ ...current, statusFilter: value }))
+        }
+        onSortOptionChange={(value) =>
+          setControls((current) => ({ ...current, sortOption: value }))
+        }
         onReset={() => {
-          setStatusFilter(defaultDevicesStatusFilter)
-          setSortOption(defaultDevicesSortOption)
+          setControls(defaultDevicesListControlsState)
         }}
       />
 

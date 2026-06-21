@@ -113,7 +113,8 @@ The repository now contains:
 - TanStack Query provider and entity query helpers over the hosted mock API
 - first real desktop `Devices List` slice with loading, error, empty, and table states
 - lightweight sorting and single status filtering on the devices screen
+- persisted devices list sort/filter preferences in localStorage
 - dedicated mobile card representation and collapsible controls for the devices screen
 - lightweight FSD-inspired folder split for `app` and `pages`
 
-The next step is to persist sorting and filtering preferences in localStorage.
+The next step is to implement the `Device Detail` page as a fuller real slice.
