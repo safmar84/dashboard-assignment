@@ -4,48 +4,145 @@ import {
   devicesListQueryOptions,
   formatDeviceStatus,
 } from '../../entities/device'
+import { Button } from '../../shared/ui/button/Button'
 import { Card } from '../../shared/ui/card/Card'
 import { StatusBadge } from '../../shared/ui/status-badge/StatusBadge'
+import './devices-list.css'
+
+const dateTimeFormatter = new Intl.DateTimeFormat('en-GB', {
+  dateStyle: 'medium',
+  timeStyle: 'short',
+})
+
+function formatLastEvent(dateTime: string | null) {
+  if (!dateTime) {
+    return 'No recent activity'
+  }
+
+  return dateTimeFormatter.format(new Date(dateTime))
+}
 
 export function DevicesListPage() {
   const devicesQuery = useQuery(devicesListQueryOptions())
   const devices = devicesQuery.data
 
+  if (devicesQuery.isLoading) {
+    return (
+      <section className="page-shell">
+        <header className="page-header">
+          <p className="page-kicker">Devices route</p>
+          <h2>Devices</h2>
+          <p>Preparing the first desktop slice from server-state data.</p>
+        </header>
+
+        <Card
+          title="Loading devices"
+          description="The devices query is resolving before the desktop table is rendered."
+        />
+      </section>
+    )
+  }
+
+  if (devicesQuery.isError) {
+    return (
+      <section className="page-shell">
+        <header className="page-header">
+          <p className="page-kicker">Devices route</p>
+          <h2>Devices</h2>
+          <p>The page is wired, but the current query result could not be resolved.</p>
+        </header>
+
+        <Card
+          title="Unable to load devices"
+          description="Retry the query to render the first desktop slice again."
+        >
+          <div style={{ marginTop: '1rem' }}>
+            <Button onClick={() => devicesQuery.refetch()} size="sm" variant="secondary">
+              Retry query
+            </Button>
+          </div>
+        </Card>
+      </section>
+    )
+  }
+
+  if (!devices || devices.items.length === 0) {
+    return (
+      <section className="page-shell">
+        <header className="page-header">
+          <p className="page-kicker">Devices route</p>
+          <h2>Devices</h2>
+          <p>The desktop slice is ready for data, but the current list is empty.</p>
+        </header>
+
+        <Card
+          title="No devices available"
+          description="An empty-state pattern is now in place for the future real endpoint integration."
+        />
+      </section>
+    )
+  }
+
   return (
-    <section className="page-shell">
+    <section className="page-shell devices-page">
       <header className="page-header">
         <p className="page-kicker">Devices route</p>
-        <h2>Devices list placeholder</h2>
+        <h2>Devices</h2>
         <p>
-          This route will host the first real vertical slice: fetched devices, desktop table,
-          mobile card view, and a small set of interactions. Device detail is intentionally
-          entered from a selected device, not from primary navigation.
+          The first real desktop slice is now in place: a table view driven by query data, with
+          navigation to a parameterized device detail route.
         </p>
       </header>
 
-      <Card
-        title="Planned columns"
-        description={
-          devices
-            ? `Device, user, status, and last event/updated. Query currently resolves page ${devices.page} of ${devices.totalPages}.`
-            : 'Devices query is wired; next step replaces the placeholder with the first real desktop list.'
-        }
-      />
+      <div className="devices-page__meta">
+        <Card
+          title="Current page"
+          description={`Query currently resolves page ${devices.page} of ${devices.totalPages}.`}
+        />
+        <Card
+          title="Visible devices"
+          description={`${devices.items.length} rows are rendered in the desktop table slice.`}
+        />
+      </div>
 
-      <div className="placeholder-list">
-        {(devices?.items ?? []).map((device) => (
-          <Link
-            key={device.id}
-            to={`/devices/${device.id}`}
-            className="placeholder-list__item"
-          >
-            <div className="placeholder-list__meta">
-              <strong>{device.model}</strong>
-              <span>{device.ownerName}</span>
-            </div>
-            <StatusBadge label={formatDeviceStatus(device.status)} />
-          </Link>
-        ))}
+      <div className="devices-table-shell">
+        <table className="devices-table">
+          <thead>
+            <tr>
+              <th scope="col">Device</th>
+              <th scope="col">User</th>
+              <th scope="col">Status</th>
+              <th scope="col">Last event / updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            {devices.items.map((device) => (
+              <tr key={device.id}>
+                <td>
+                  <Link
+                    to={`/devices/${device.id}`}
+                    className="devices-table__device-link"
+                  >
+                    <strong>{device.model}</strong>
+                    <span className="devices-table__secondary">{device.id}</span>
+                  </Link>
+                </td>
+                <td className="devices-table__secondary">{device.ownerName}</td>
+                <td>
+                  <StatusBadge label={formatDeviceStatus(device.status)} />
+                </td>
+                <td>
+                  <div className="devices-table__event">
+                    <strong>{device.lastEventLabel ?? 'No event yet'}</strong>
+                    <span className="devices-table__secondary">
+                      {formatLastEvent(device.lastEventAt)}
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </section>
   )

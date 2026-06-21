@@ -1,6 +1,6 @@
 import './status-badge.css'
 
-export type StatusTone = 'active' | 'expired' | 'removed' | 'neutral'
+export type StatusTone = 'active' | 'expired' | 'removed' | 'blocked' | 'neutral'
 
 type StatusBadgeProps = {
   label: string
@@ -15,6 +15,8 @@ function normalizeTone(label: string): StatusTone {
       return 'expired'
     case 'removed':
       return 'removed'
+    case 'blocked':
+      return 'blocked'
     default:
       return 'neutral'
   }

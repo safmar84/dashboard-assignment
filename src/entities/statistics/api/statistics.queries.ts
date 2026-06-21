@@ -1,6 +1,8 @@
 import { queryOptions } from '@tanstack/react-query'
+import { apiPaths } from '../../../shared/api/config'
+import { getJson } from '../../../shared/api/http'
 import { adaptStatisticsOverview } from './statistics.adapters'
-import { statisticsOverviewFixture } from '../mock/statistics.fixtures'
+import { statisticsOverviewDtoSchema } from './statistics.schemas'
 
 export const statisticsQueryKeys = {
   all: ['statistics'] as const,
@@ -10,6 +12,10 @@ export const statisticsQueryKeys = {
 export function statisticsOverviewQueryOptions() {
   return queryOptions({
     queryKey: statisticsQueryKeys.overview(),
-    queryFn: async () => adaptStatisticsOverview(statisticsOverviewFixture),
+    queryFn: async () => {
+      const dto = await getJson(apiPaths.statistics, statisticsOverviewDtoSchema)
+
+      return adaptStatisticsOverview(dto)
+    },
   })
 }

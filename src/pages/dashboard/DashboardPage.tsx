@@ -31,7 +31,7 @@ export function DashboardPage() {
           title="Status breakdown"
           description={
             statistics
-              ? `${statistics.activeDevices} active, ${statistics.expiredDevices} expired, ${statistics.removedDevices} removed.`
+              ? `${statistics.activeDevices} active, ${statistics.blockedDevices} blocked, ${statistics.expiredDevices} expired, ${statistics.removedDevices} removed.`
               : 'Status totals will render once the overview query resolves.'
           }
         />

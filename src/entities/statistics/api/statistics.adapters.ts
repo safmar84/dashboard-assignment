@@ -5,10 +5,11 @@ export function adaptStatisticsOverview(input: unknown): StatisticsOverview {
   const dto = statisticsOverviewDtoSchema.parse(input)
 
   return {
-    totalDevices: dto.totalDevices,
-    totalUsers: dto.totalUsers,
-    activeDevices: dto.activeDevices,
-    expiredDevices: dto.expiredDevices,
-    removedDevices: dto.removedDevices,
+    totalDevices: dto.totals.devices,
+    totalUsers: dto.totals.users,
+    activeDevices: dto.totals.activeDevices,
+    blockedDevices: dto.totals.blockedDevices,
+    expiredDevices: dto.totals.expiredDevices,
+    removedDevices: dto.totals.removedDevices,
   }
 }

@@ -64,6 +64,15 @@ Prefer exposing entity capabilities through public entrypoints such as `entities
 
 If temporary fixtures are needed before real networking is wired, keep them in a dedicated mock layer, not inside the entity API folder.
 
+Fixture payloads in the mock layer should be validated with the relevant Zod schema at definition/import time whenever practical. That way mock data stays coupled to the DTO contract even before it reaches adapters or tests.
+
+### Testing approach
+
+- Keep tests small and close to the seam they protect.
+- Prefer adapter tests over broad UI tests when validating DTO-to-domain mapping.
+- It is acceptable for tests to use local mock payloads while the running app uses the hosted mock API.
+- Protect infrastructure bugs, such as broken endpoint URL composition, with focused regression tests.
+
 ## How to Extend Safely
 
 When adding a new feature:

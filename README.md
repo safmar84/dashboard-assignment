@@ -51,6 +51,16 @@ This means that **Zod schemas live next to the entity they describe**, not in a 
 
 To keep boundaries explicit, page code should prefer **public entity entrypoints** such as `entities/device` instead of reaching into deep internal paths. Mock fixtures may exist temporarily during development, but they should live in a dedicated mock layer rather than inside the entity API folder itself.
 
+### Mock and test data strategy
+
+Mock fixture payloads live in the entity mock layer and are validated with Zod **at creation/import time**, not only later inside adapters. This keeps local mock data aligned with the same DTO contract expected from the backend.
+
+The current test strategy is intentionally small and focused:
+
+- adapter tests run against locally stored DTO-shaped mock payloads
+- a dedicated URL regression test protects endpoint URL construction
+- the running application uses the hosted mock API for live integration behavior
+
 ## Key Principles
 
 - Small vertical slices instead of big-bang implementation
@@ -99,7 +109,9 @@ The repository now contains:
 - shared UI primitives: `Button`, `Card`, `StatusBadge`
 - prepared API boundary with Zod schemas, endpoint config, and adapters
 - first focused adapter tests using Vitest
-- TanStack Query provider and entity query helpers over mock server-state
+- mock fixtures runtime-validated with Zod on import
+- TanStack Query provider and entity query helpers over the hosted mock API
+- first real desktop `Devices List` slice with loading, error, empty, and table states
 - lightweight FSD-inspired folder split for `app` and `pages`
 
-The next step is to replace the placeholder devices screen with the first real desktop slice.
+The next step is to add sorting and status filtering to the devices screen.

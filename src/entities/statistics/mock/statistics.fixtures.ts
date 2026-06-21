@@ -1,9 +1,20 @@
-import type { StatisticsOverviewDto } from '../api/statistics.schemas'
+import {
+  statisticsOverviewDtoSchema,
+  type StatisticsOverviewDto,
+} from '../api/statistics.schemas'
 
-export const statisticsOverviewFixture: StatisticsOverviewDto = {
-  totalDevices: 1240,
-  totalUsers: 912,
-  activeDevices: 980,
-  expiredDevices: 165,
-  removedDevices: 95,
+const statisticsOverviewFixtureRaw: StatisticsOverviewDto = {
+  generatedAt: '2026-05-22T10:00:00Z',
+  totals: {
+    devices: 120,
+    users: 25,
+    activeDevices: 68,
+    removedDevices: 28,
+    expiredDevices: 11,
+    blockedDevices: 13,
+    events: 1849,
+  },
 }
+
+export const statisticsOverviewFixture =
+  statisticsOverviewDtoSchema.parse(statisticsOverviewFixtureRaw)

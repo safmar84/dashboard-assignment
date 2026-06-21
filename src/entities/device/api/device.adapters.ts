@@ -23,23 +23,27 @@ function formatEventLabel(type: string) {
 
 function adaptDeviceEvent(dto: DeviceEventDto): DeviceEvent {
   const parsed = deviceEventDtoSchema.parse(dto)
+  const descriptionParts = [parsed.result, parsed.location].filter(Boolean)
 
   return {
     id: parsed.id,
     label: formatEventLabel(parsed.type),
-    occurredAt: parsed.createdAt,
-    description: parsed.description ?? null,
+    occurredAt: parsed.timestamp,
+    description: descriptionParts.length > 0 ? descriptionParts.join(' · ') : null,
   }
 }
 
 function adaptDeviceSummary(dto: DeviceSummaryDto): DeviceSummary {
   return {
     id: dto.id,
+    shortId: dto.shortId,
+    vendor: dto.vendor,
     model: dto.model,
+    platform: dto.platform,
     status: dto.status,
-    ownerName: dto.owner.name,
-    lastEventLabel: dto.lastEvent ? formatEventLabel(dto.lastEvent.type) : null,
-    lastEventAt: dto.lastEvent?.createdAt ?? null,
+    ownerName: dto.user.displayName,
+    lastEventLabel: dto.lastActiveAt ? 'Last active' : null,
+    lastEventAt: dto.lastActiveAt ?? null,
   }
 }
 
@@ -47,7 +51,7 @@ export function adaptDevicesIndex(input: unknown): DevicesIndex {
   const dto = devicesIndexDtoSchema.parse(input)
 
   return {
-    page: dto.page,
+    page: dto.page ?? 1,
     totalPages: dto.totalPages,
     items: dto.items.map(adaptDeviceSummary),
   }
@@ -58,11 +62,20 @@ export function adaptDeviceDetail(input: unknown): DeviceDetail {
 
   return {
     id: dto.id,
+    shortId: dto.shortId,
+    vendor: dto.vendor,
     model: dto.model,
     platform: dto.platform ?? null,
+    osVersion: dto.osVersion ?? null,
+    appVersion: dto.appVersion ?? null,
     status: dto.status,
-    owner: dto.owner,
-    activatedAt: dto.activatedAt ?? null,
+    biometryEnabled: dto.biometryEnabled,
+    owner: {
+      id: dto.user.id,
+      name: dto.user.displayName,
+    },
+    createdAt: dto.createdAt ?? null,
+    lastActiveAt: dto.lastActiveAt ?? null,
     events: dto.events.map(adaptDeviceEvent),
   }
 }
