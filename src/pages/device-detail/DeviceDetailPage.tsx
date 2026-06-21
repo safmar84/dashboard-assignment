@@ -1,16 +1,18 @@
 import { useParams } from 'react-router-dom'
+import {
+  adaptDeviceDetail,
+  deviceDetailFixtures,
+  formatDeviceStatus,
+} from '../../entities/device'
 import { Button } from '../../shared/ui/button/Button'
 import { Card } from '../../shared/ui/card/Card'
 import { StatusBadge } from '../../shared/ui/status-badge/StatusBadge'
 
-const timelinePreview = [
-  { label: 'Activation', detail: 'Device enrolled successfully' },
-  { label: 'Login', detail: 'User completed authentication flow' },
-  { label: 'Signature', detail: 'Transaction signature recorded' },
-]
-
 export function DeviceDetailPage() {
   const { deviceId } = useParams()
+  const detail = adaptDeviceDetail(
+    deviceDetailFixtures[deviceId ?? 'demo-device'] ?? deviceDetailFixtures['demo-device'],
+  )
 
   return (
     <section className="page-shell">
@@ -30,29 +32,29 @@ export function DeviceDetailPage() {
       <div className="placeholder-meta">
         <Card
           title="Device identity"
-          description="Reserved for model, status, and activation metadata."
+          description={`${detail.model}${detail.platform ? ` · ${detail.platform}` : ''}`}
         >
           <div style={{ marginTop: '1rem' }}>
-            <StatusBadge label="Active" />
+            <StatusBadge label={formatDeviceStatus(detail.status)} />
           </div>
         </Card>
         <Card
           title="Owner context"
-          description="Reserved for the owning user and related account information."
+          description={`${detail.owner.name} · ${detail.owner.id}`}
         />
       </div>
 
       <div className="placeholder-stack">
         <Card
           title="Timeline preview"
-          description="Reserved for the event history delivered by the device detail endpoint."
+          description={`Boundary currently maps ${detail.events.length} normalized events for the selected device.`}
         />
 
         <div className="placeholder-timeline">
-          {timelinePreview.map((event) => (
+          {detail.events.map((event) => (
             <div key={event.label} className="placeholder-timeline__item">
               <strong>{event.label}</strong>
-              <span>{event.detail}</span>
+              <span>{event.description ?? event.occurredAt}</span>
             </div>
           ))}
         </div>

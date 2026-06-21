@@ -1,7 +1,10 @@
 import { Button } from '../../shared/ui/button/Button'
 import { Card } from '../../shared/ui/card/Card'
+import { adaptStatisticsOverview, statisticsOverviewFixture } from '../../entities/statistics'
 
 export function DashboardPage() {
+  const statistics = adaptStatisticsOverview(statisticsOverviewFixture)
+
   return (
     <section className="page-shell">
       <header className="page-header">
@@ -16,11 +19,11 @@ export function DashboardPage() {
       <div className="placeholder-grid">
         <Card
           title="Statistics summary"
-          description="Reserved for aggregate metrics fetched from the statistics endpoint."
+          description={`Prepared through the API boundary: ${statistics.totalDevices} devices across ${statistics.totalUsers} users.`}
         />
         <Card
           title="Status breakdown"
-          description="Reserved for a simple chart focused on device status distribution."
+          description={`${statistics.activeDevices} active, ${statistics.expiredDevices} expired, ${statistics.removedDevices} removed.`}
         />
         <Card
           title="Navigation shortcut"

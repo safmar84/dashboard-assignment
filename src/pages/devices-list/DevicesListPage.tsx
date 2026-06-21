@@ -1,14 +1,15 @@
 import { Link } from 'react-router-dom'
+import {
+  adaptDevicesIndex,
+  devicesIndexFixture,
+  formatDeviceStatus,
+} from '../../entities/device'
 import { Card } from '../../shared/ui/card/Card'
 import { StatusBadge } from '../../shared/ui/status-badge/StatusBadge'
 
-const placeholderDevices = [
-  { id: 'demo-device', name: 'iPhone 15 Pro', owner: 'Jane Doe', status: 'Active' },
-  { id: 'pixel-8', name: 'Pixel 8', owner: 'John Appleseed', status: 'Expired' },
-  { id: 'galaxy-s24', name: 'Galaxy S24', owner: 'Alex Smith', status: 'Removed' },
-]
-
 export function DevicesListPage() {
+  const devices = adaptDevicesIndex(devicesIndexFixture)
+
   return (
     <section className="page-shell">
       <header className="page-header">
@@ -23,21 +24,21 @@ export function DevicesListPage() {
 
       <Card
         title="Planned columns"
-        description="Device, user, status, and last event/updated."
+        description={`Device, user, status, and last event/updated. Boundary currently maps page ${devices.page} of ${devices.totalPages}.`}
       />
 
       <div className="placeholder-list">
-        {placeholderDevices.map((device) => (
+        {devices.items.map((device) => (
           <Link
             key={device.id}
             to={`/devices/${device.id}`}
             className="placeholder-list__item"
           >
             <div className="placeholder-list__meta">
-              <strong>{device.name}</strong>
-              <span>{device.owner}</span>
+              <strong>{device.model}</strong>
+              <span>{device.ownerName}</span>
             </div>
-            <StatusBadge label={device.status} />
+            <StatusBadge label={formatDeviceStatus(device.status)} />
           </Link>
         ))}
       </div>

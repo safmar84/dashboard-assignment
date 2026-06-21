@@ -29,6 +29,28 @@ The app is intentionally small and focused:
 - **Architecture:** lightweight FSD-inspired structure
 - **Styling:** custom design foundations with a small set of shared primitives
 
+## Architecture Notes
+
+This project uses a **lightweight FSD-inspired structure**. The goal is not strict framework purity, but a codebase where responsibilities stay easy to explain and extend.
+
+### Layer responsibilities
+
+- **`app`** - application bootstrap, routing, top-level providers, app shell
+- **`pages`** - route-level composition for individual screens
+- **`entities`** - domain-focused models, API contracts, adapters, and entity-specific UI building blocks
+- **`shared`** - cross-domain infrastructure and reusable primitives such as UI components, styling tokens, generic API helpers, and config
+
+### API boundary
+
+The API boundary is intentionally split into two concerns:
+
+- **`shared/api`** contains generic infrastructure that is not tied to a specific domain, such as HTTP utilities, endpoint config, and shared error types
+- **`entities/*/api`** contains domain-specific DTO schemas and adapters that translate remote payloads into app-facing domain models
+
+This means that **Zod schemas live next to the entity they describe**, not in a global validation bucket. In this project, that is intentional: the schema is treated as part of the domain boundary, not just as a low-level utility.
+
+To keep boundaries explicit, page code should prefer **public entity entrypoints** such as `entities/device` instead of reaching into deep internal paths. Mock fixtures may exist temporarily during development, but they should live in a dedicated mock layer rather than inside the entity API folder itself.
+
 ## Key Principles
 
 - Small vertical slices instead of big-bang implementation
@@ -75,6 +97,7 @@ The repository now contains:
 - basic route structure for `Dashboard`, `Devices List`, and `Device Detail`
 - initial design foundations based on shared tokens
 - shared UI primitives: `Button`, `Card`, `StatusBadge`
+- prepared API boundary with Zod schemas, endpoint config, and adapters
 - lightweight FSD-inspired folder split for `app` and `pages`
 
-The next step is to add the API boundary with typed schemas and adapters.
+The next step is to add the first tests for pure data logic and protect the new adapters.

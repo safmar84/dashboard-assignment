@@ -31,6 +31,13 @@ The project should follow a **lightweight FSD-inspired structure**:
 
 This is meant as a practical organizational tool, not as a strict dogmatic rule set.
 
+### Layer intent
+
+- Keep **`app`** free of domain details except for top-level wiring.
+- Let **`pages`** compose routes from lower-level pieces instead of owning heavy business logic.
+- Treat **`entities`** as the home for domain models and their API boundary.
+- Keep **`shared`** generic; if code starts describing a specific business concept, it likely belongs in an entity or higher layer.
+
 ## UI and Responsive Rules
 
 - Use a dark visual baseline with blue accent inspired by Wultra branding.
@@ -46,6 +53,16 @@ This is meant as a practical organizational tool, not as a strict dogmatic rule 
 - Validate API payloads with Zod where practical.
 - Use typed adapters/mappers before data reaches page UI.
 - Keep loading and error handling consistent across pages.
+
+### Zod schema placement
+
+In this repository, domain-specific Zod schemas should live inside the relevant entity API layer, for example `entities/device/api` or `entities/statistics/api`.
+
+That is intentional: a DTO schema is considered part of the entity's boundary with the backend. Only generic transport concerns, such as shared HTTP helpers, config, or common API errors, belong in `shared/api`.
+
+Prefer exposing entity capabilities through public entrypoints such as `entities/device/index.ts` and `entities/statistics/index.ts`. Page-level code should avoid deep imports into entity internals unless there is a strong reason.
+
+If temporary fixtures are needed before real networking is wired, keep them in a dedicated mock layer, not inside the entity API folder.
 
 ## How to Extend Safely
 

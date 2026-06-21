@@ -16,21 +16,21 @@
 - Done: Vite + React + TypeScript bootstrap
 - Done: app shell and routing skeleton with React Router
 - Done: design foundations and shared primitives
+- Done: API boundary with Zod schemas and adapters
 
 ## Commit Plan
 
-1. Add API boundary with Zod schemas and adapters
-2. Add first tests for pure data logic
-3. Add TanStack Query and server-state setup
-4. Implement Devices List desktop slice
-5. Add sorting and status filtering
-6. Add mobile card representation for Devices List
-7. Add localStorage persistence for sort and filter
-8. Implement Device Detail page
-9. Implement Dashboard page
-10. Polish responsiveness and interaction ergonomics
-11. Finalize README
-12. Remove this `plan.md`
+1. Add first tests for pure data logic
+2. Add TanStack Query and server-state setup
+3. Implement Devices List desktop slice
+4. Add sorting and status filtering
+5. Add mobile card representation for Devices List
+6. Add localStorage persistence for sort and filter
+7. Implement Device Detail page
+8. Implement Dashboard page
+9. Polish responsiveness and interaction ergonomics
+10. Finalize README
+11. Remove this `plan.md`
 
 ## Notes for Final Review
 
