@@ -64,7 +64,7 @@ export function DeviceDetailPage() {
 
         <div className="placeholder-timeline">
           {(detail?.events ?? []).map((event) => (
-            <div key={event.label} className="placeholder-timeline__item">
+            <div key={event.id} className="placeholder-timeline__item">
               <strong>{event.label}</strong>
               <span>{event.description ?? event.occurredAt}</span>
             </div>
