@@ -14,23 +14,23 @@
 
 - Done: repository guidance documents (`README.md`, `AGENTS.md`, temporary `plan.md`)
 - Done: Vite + React + TypeScript bootstrap
+- Done: app shell and routing skeleton with React Router
 
 ## Commit Plan
 
-1. Add app shell and routing skeleton
-2. Add design foundations and shared primitives
-3. Add API boundary with Zod schemas and adapters
-4. Add first tests for pure data logic
-5. Add TanStack Query and server-state setup
-6. Implement Devices List desktop slice
-7. Add sorting and status filtering
-8. Add mobile card representation for Devices List
-9. Add localStorage persistence for sort and filter
-10. Implement Device Detail page
-11. Implement Dashboard page
-12. Polish responsiveness and interaction ergonomics
-13. Finalize README
-14. Remove this `plan.md`
+1. Add design foundations and shared primitives
+2. Add API boundary with Zod schemas and adapters
+3. Add first tests for pure data logic
+4. Add TanStack Query and server-state setup
+5. Implement Devices List desktop slice
+6. Add sorting and status filtering
+7. Add mobile card representation for Devices List
+8. Add localStorage persistence for sort and filter
+9. Implement Device Detail page
+10. Implement Dashboard page
+11. Polish responsiveness and interaction ergonomics
+12. Finalize README
+13. Remove this `plan.md`
 
 ## Notes for Final Review
 

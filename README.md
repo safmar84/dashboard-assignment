@@ -68,4 +68,11 @@ npm run build
 
 ## Current Status
 
-The repository now contains the initial Vite + React + TypeScript bootstrap. The next step is to replace the default starter UI with the first application shell and routing structure.
+The repository now contains:
+
+- Vite + React + TypeScript bootstrap
+- initial app shell
+- basic route structure for `Dashboard`, `Devices List`, and `Device Detail`
+- lightweight FSD-inspired folder split for `app` and `pages`
+
+The next step is to add the first design foundations and shared UI primitives.
