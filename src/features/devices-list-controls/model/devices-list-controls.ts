@@ -77,6 +77,25 @@ export function filterAndSortDevices(
   })
 }
 
+export function hasCustomDevicesListControls(state: DevicesListControlsState) {
+  return (
+    state.statusFilter !== defaultDevicesStatusFilter ||
+    state.sortOption !== defaultDevicesSortOption
+  )
+}
+
+export function paginateDevices<T>(items: T[], page: number, pageSize: number) {
+  const totalPages = Math.max(1, Math.ceil(items.length / pageSize))
+  const resolvedPage = Math.min(Math.max(1, page), totalPages)
+  const startIndex = (resolvedPage - 1) * pageSize
+
+  return {
+    page: resolvedPage,
+    totalPages,
+    items: items.slice(startIndex, startIndex + pageSize),
+  }
+}
+
 export function readDevicesListControls(storage: StorageReader | null | undefined) {
   const rawValue = storage?.getItem(devicesListControlsStorageKey)
 

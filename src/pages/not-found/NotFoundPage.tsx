@@ -4,9 +4,8 @@ export function NotFoundPage() {
   return (
     <section className="page-shell">
       <header className="page-header">
-        <p className="page-kicker">Unknown route</p>
         <h2>Page not found</h2>
-        <p>The current route is outside the planned assignment scope.</p>
+        <p>The page you&apos;re looking for doesn&apos;t exist.</p>
       </header>
 
       <Button to="/" variant="secondary">

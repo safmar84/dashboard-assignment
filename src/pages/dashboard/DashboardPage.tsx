@@ -25,9 +25,8 @@ export function DashboardPage() {
     return (
       <section className="page-shell">
         <header className="page-header">
-          <p className="page-kicker">Overview route</p>
           <h2>Loading dashboard</h2>
-          <p>The overview is resolving live statistics from the hosted API.</p>
+          <p>Loading overview data.</p>
         </header>
 
         <div className="dashboard__metrics">
@@ -44,17 +43,13 @@ export function DashboardPage() {
     return (
       <section className="page-shell">
         <header className="page-header">
-          <p className="page-kicker">Overview route</p>
           <h2>Unable to load dashboard</h2>
-          <p>The route is wired, but the overview statistics could not be resolved right now.</p>
+          <p>Dashboard data could not be loaded right now.</p>
         </header>
 
         <div className="dashboard__actions">
           <Button onClick={() => statisticsQuery.refetch()} size="sm" className="dashboard__action">
             Retry query
-          </Button>
-          <Button size="sm" to="/devices" variant="secondary" className="dashboard__action">
-            Open devices
           </Button>
         </div>
       </section>
@@ -89,20 +84,9 @@ export function DashboardPage() {
   return (
     <section className="page-shell">
       <header className="page-header">
-        <p className="page-kicker">Overview route</p>
         <h2>Dashboard</h2>
-        <p>
-          The overview now renders a real summary slice over hosted statistics data: core KPIs,
-          device status distribution, and a quick path into the detailed devices workflow.
-        </p>
+        <p>Overview of device volume, status distribution, and recent activity totals.</p>
       </header>
-
-      <div className="dashboard__actions">
-        <Button size="sm" to="/devices" variant="secondary" className="dashboard__action">
-          Open devices
-        </Button>
-      </div>
-
       <div className="dashboard__metrics">
         <Card className="dashboard__metric-card">
           <p className="dashboard__metric-label">Devices</p>

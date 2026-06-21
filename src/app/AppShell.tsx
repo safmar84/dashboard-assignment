@@ -12,10 +12,9 @@ export function AppShell() {
       <header className="app-header">
         <div>
           <p className="app-eyebrow">Wultra React Assignment</p>
-          <h1 className="app-title">Device dashboard skeleton</h1>
+          <h1 className="app-title">Registered devices management</h1>
           <p className="app-description">
-            Initial route structure and shared shell for the SPA. Real data and design
-            primitives will land in the next slices.
+            Overview of registered devices, operational status, and device-level activity.
           </p>
         </div>
 

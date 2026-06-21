@@ -14,6 +14,8 @@ describe('device adapters', () => {
     )
 
     expect(index.page).toBe(1)
+    expect(index.pageSize).toBe(25)
+    expect(index.totalItems).toBe(120)
     expect(index.totalPages).toBe(5)
     expect(index.items[0]).toMatchObject({
       id: 'bdd640fb-0667-4ad1-9c80-317fa3b1799d',

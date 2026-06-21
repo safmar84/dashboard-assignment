@@ -73,6 +73,15 @@ Fixture payloads in the mock layer should be validated with the relevant Zod sch
 - It is acceptable for tests to use local mock payloads while the running app uses the hosted mock API.
 - Protect infrastructure bugs, such as broken endpoint URL composition, with focused regression tests.
 
+### Devices list pagination strategy
+
+- Load the full devices dataset before rendering the interactive list state.
+- Apply filtering and sorting globally across the aggregated dataset, not per transport page.
+- Paginate only after filtering/sorting, so the pager reflects the actual visible result set.
+- Keep the explicit `devices/page-N.json` endpoints in mind as a possible future optimization for
+  faster first render, but prefer the simpler full-dataset behavior unless there is a strong reason
+  to introduce more loading complexity.
+
 ## How to Extend Safely
 
 When adding a new feature:

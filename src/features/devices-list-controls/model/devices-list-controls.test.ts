@@ -3,6 +3,8 @@ import { adaptDevicesIndex, devicesIndexFixture } from '../../../entities/device
 import {
   defaultDevicesListControlsState,
   filterAndSortDevices,
+  hasCustomDevicesListControls,
+  paginateDevices,
   persistDevicesListControls,
   readDevicesListControls,
   type DevicesListControlsState,
@@ -45,6 +47,27 @@ describe('devices list controls', () => {
       'bdd640fb-0667-4ad1-9c80-317fa3b1799d',
       '14fcdd54-9e8f-4965-8a2c-827e98326856',
     ])
+  })
+
+  it('identifies whether persisted controls differ from defaults', () => {
+    expect(hasCustomDevicesListControls(defaultDevicesListControlsState)).toBe(false)
+    expect(
+      hasCustomDevicesListControls({
+        statusFilter: 'blocked',
+        sortOption: 'last-active-desc',
+      }),
+    ).toBe(true)
+  })
+
+  it('paginates items and clamps out-of-range pages', () => {
+    const devices = runControls('all', 'last-active-desc')
+    const paged = paginateDevices(devices, 2, 3)
+    const clamped = paginateDevices(devices, 99, 3)
+
+    expect(paged.page).toBe(2)
+    expect(paged.totalPages).toBe(2)
+    expect(paged.items).toHaveLength(1)
+    expect(clamped.page).toBe(2)
   })
 
   it('reads persisted controls from storage when payload is valid', () => {

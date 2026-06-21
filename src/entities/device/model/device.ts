@@ -14,6 +14,15 @@ export type DeviceSummary = {
 
 export type DevicesIndex = {
   page: number
+  pageSize: number
+  totalItems: number
+  totalPages: number
+  items: DeviceSummary[]
+}
+
+export type DevicesDataset = {
+  pageSize: number
+  totalItems: number
   totalPages: number
   items: DeviceSummary[]
 }

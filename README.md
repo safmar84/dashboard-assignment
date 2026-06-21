@@ -61,6 +61,23 @@ The current test strategy is intentionally small and focused:
 - a dedicated URL regression test protects endpoint URL construction
 - the running application uses the hosted mock API for live integration behavior
 
+### Devices list loading strategy
+
+The hosted mock API exposes explicit `page-N.json` files, but it does not provide server-side
+sorting or filtering. The current implementation therefore chooses the simplest consistent behavior:
+
+1. load the full devices dataset,
+2. apply filtering and sorting globally across all devices,
+3. paginate the filtered result locally in the client.
+
+This keeps the user-facing behavior predictable: filters and sorting always work over the whole
+dataset, not only over a single transport page from the mock API.
+
+An obvious future optimization would be to use the explicit page endpoints for a faster initial
+render and progressively hydrate the full dataset in the background. That optimization is noted
+intentionally, but was not chosen for the current implementation because the simpler full-dataset
+approach is easier to reason about and defend in the assignment.
+
 ## Key Principles
 
 - Small vertical slices instead of big-bang implementation
@@ -113,6 +130,7 @@ The repository now contains:
 - TanStack Query provider and entity query helpers over the hosted mock API
 - first real desktop `Devices List` slice with loading, error, empty, and table states
 - lightweight sorting and single status filtering on the devices screen
+- client-side devices pagination over the full aggregated dataset
 - persisted devices list sort/filter preferences in localStorage
 - real `Device Detail` slice with metadata cards and event timeline from the hosted API
 - real `Dashboard` slice with KPI cards and status distribution from statistics data

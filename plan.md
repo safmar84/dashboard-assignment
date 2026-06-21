@@ -21,6 +21,7 @@
 - Done: TanStack Query and server-state setup
 - Done: Devices List desktop slice
 - Done: sorting and status filtering
+- Done: client-side devices pagination over the full dataset
 - Done: mobile card representation for Devices List
 - Done: localStorage persistence for devices list controls
 - Done: real Device Detail page

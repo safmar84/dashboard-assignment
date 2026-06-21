@@ -36,14 +36,14 @@ export function DeviceDetailPage() {
     return (
       <section className="page-shell">
         <header className="page-header">
-          <p className="page-kicker">Device detail route</p>
-          <h2>Loading device detail</h2>
-          <p>The selected device is being resolved from the hosted API detail endpoint.</p>
+          <div className="device-detail__title-row">
+            <Button to="/devices" variant="secondary" size="sm" className="device-detail__back-button">
+              ←
+            </Button>
+            <h2>Loading device detail</h2>
+          </div>
+          <p>Loading device details.</p>
         </header>
-
-        <Button to="/devices" variant="secondary" className="device-detail__back-link">
-          Back to devices
-        </Button>
 
         <div className="device-detail__grid device-detail__grid--summary">
           <Card title="Device summary" description="Waiting for normalized identity and status data." />
@@ -58,18 +58,16 @@ export function DeviceDetailPage() {
     return (
       <section className="page-shell">
         <header className="page-header">
-          <p className="page-kicker">Device detail route</p>
-          <h2>Unable to load device detail</h2>
-          <p>
-            The route is wired correctly, but the current device detail payload could not be
-            resolved for <code>{resolvedDeviceId}</code>.
-          </p>
+          <div className="device-detail__title-row">
+            <Button to="/devices" variant="secondary" size="sm" className="device-detail__back-button">
+              ←
+            </Button>
+            <h2>Unable to load device detail</h2>
+          </div>
+          <p>Device details could not be loaded right now.</p>
         </header>
 
         <div className="device-detail__actions">
-          <Button to="/devices" variant="secondary" className="device-detail__back-link">
-            Back to devices
-          </Button>
           <Button onClick={() => detailQuery.refetch()} size="sm" className="device-detail__back-link">
             Retry query
           </Button>
@@ -86,18 +84,16 @@ export function DeviceDetailPage() {
   return (
     <section className="page-shell">
       <header className="page-header">
-        <p className="page-kicker">Device detail route</p>
-        <h2>{detail.model}</h2>
-        <p>
-          Detail now renders a real device slice from the hosted API: identity, owner context,
-          security metadata, and a normalized event timeline for <code>{resolvedDeviceId}</code>.
-        </p>
+        <div className="device-detail__title-row">
+          <Button to="/devices" variant="secondary" size="sm" className="device-detail__back-button">
+            ←
+          </Button>
+          <h2>{detail.model}</h2>
+        </div>
+        <p>Device details, ownership, security settings, and activity history.</p>
       </header>
 
       <div className="device-detail__actions">
-        <Button to="/devices" variant="secondary" className="device-detail__back-link">
-          Back to devices
-        </Button>
         <StatusBadge label={formatDeviceStatus(detail.status)} />
       </div>
 
@@ -176,7 +172,7 @@ export function DeviceDetailPage() {
 
       <Card
         title="Activity timeline"
-        description={`The hosted mock API currently returns ${detail.events.length} normalized events for this device.`}
+        description="Recent activity recorded for this device."
       >
         {detail.events.length === 0 ? (
           <p className="device-detail__empty">No events are available for this device yet.</p>

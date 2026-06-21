@@ -4,6 +4,6 @@ export const API_BASE_URL =
 
 export const apiPaths = {
   statistics: 'statistics.json',
-  devicesIndex: (page = 1) => (page <= 1 ? 'devices/index.json' : `devices/page-${page}.json`),
+  devicesIndex: (page = 1) => `devices/page-${Math.max(1, page)}.json`,
   deviceDetail: (deviceId: string) => `devices/${deviceId}.json`,
 } as const

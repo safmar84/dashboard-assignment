@@ -11,6 +11,8 @@ type DevicesListToolbarProps = {
   sortOption: DevicesSortOption
   visibleCount: number
   totalCount: number
+  disabled?: boolean
+  statusMessage?: string
   onStatusFilterChange: (value: DevicesStatusFilter) => void
   onSortOptionChange: (value: DevicesSortOption) => void
   onReset: () => void
@@ -21,6 +23,8 @@ export function DevicesListToolbar({
   sortOption,
   visibleCount,
   totalCount,
+  disabled = false,
+  statusMessage,
   onStatusFilterChange,
   onSortOptionChange,
   onReset,
@@ -43,11 +47,14 @@ export function DevicesListToolbar({
           size="sm"
           variant="secondary"
           className="devices-toolbar__toggle"
+          disabled={disabled}
           onClick={() => setIsMobileExpanded((current) => !current)}
         >
           {isMobileExpanded ? 'Hide filters' : 'Show filters'}
         </Button>
       </div>
+
+      {statusMessage ? <p className="devices-toolbar__status">{statusMessage}</p> : null}
 
       <div
         className={`devices-toolbar__controls${isMobileExpanded ? ' devices-toolbar__controls--expanded' : ''}`}
@@ -56,6 +63,7 @@ export function DevicesListToolbar({
           <span>Status</span>
           <select
             value={statusFilter}
+            disabled={disabled}
             onChange={(event) =>
               onStatusFilterChange(event.target.value as DevicesStatusFilter)
             }
@@ -72,6 +80,7 @@ export function DevicesListToolbar({
           <span>Sort by</span>
           <select
             value={sortOption}
+            disabled={disabled}
             onChange={(event) =>
               onSortOptionChange(event.target.value as DevicesSortOption)
             }
@@ -87,7 +96,7 @@ export function DevicesListToolbar({
           size="sm"
           variant="secondary"
           onClick={onReset}
-          disabled={!hasCustomControls}
+          disabled={disabled || !hasCustomControls}
         >
           Reset
         </Button>

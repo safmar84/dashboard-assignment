@@ -32,6 +32,11 @@
   color: var(--color-text-secondary);
 }
 
+.devices-toolbar__status {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
 .devices-toolbar__controls {
   display: flex;
   flex-wrap: wrap;
@@ -67,6 +72,12 @@
 .devices-toolbar__field select:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+.devices-toolbar__field select:disabled,
+.devices-toolbar__toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
 }
 
 @media (max-width: 768px) {

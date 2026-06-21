@@ -1,5 +1,9 @@
 export { adaptDeviceDetail, adaptDevicesIndex } from './api/device.adapters'
-export { deviceDetailQueryOptions, devicesListQueryOptions } from './api/device.queries'
+export {
+  deviceDetailQueryOptions,
+  devicesDatasetQueryOptions,
+  devicesListQueryOptions,
+} from './api/device.queries'
 export type {
   DeviceDetailDto,
   DeviceEventDto,
@@ -10,6 +14,7 @@ export { deviceDetailDtoSchema, devicesIndexDtoSchema } from './api/device.schem
 export { deviceDetailFixtures, devicesIndexFixture } from './mock/device.fixtures'
 export type {
   DeviceDetail,
+  DevicesDataset,
   DeviceEvent,
   DevicesIndex,
   DeviceStatus,

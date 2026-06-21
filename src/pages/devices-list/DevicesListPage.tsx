@@ -1,13 +1,14 @@
-import { useQuery } from '@tanstack/react-query'
-import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
-  devicesListQueryOptions,
+  devicesDatasetQueryOptions,
   formatDeviceStatus,
 } from '../../entities/device'
 import {
-  filterAndSortDevices,
   defaultDevicesListControlsState,
+  filterAndSortDevices,
+  paginateDevices,
   persistDevicesListControls,
   readDevicesListControls,
 } from '../../features/devices-list-controls/model/devices-list-controls'
@@ -30,9 +31,19 @@ function formatLastEvent(dateTime: string | null) {
   return dateTimeFormatter.format(new Date(dateTime))
 }
 
+function parsePage(rawValue: string | null) {
+  const parsed = Number(rawValue)
+
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : 1
+}
+
 export function DevicesListPage() {
-  const devicesQuery = useQuery(devicesListQueryOptions())
-  const devices = devicesQuery.data
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const currentPage = parsePage(searchParams.get('page'))
+  const devicesDatasetQuery = useQuery(devicesDatasetQueryOptions(queryClient))
+  const devicesDataset = devicesDatasetQuery.data
   const [controls, setControls] = useState(() =>
     readDevicesListControls(typeof window === 'undefined' ? null : window.localStorage),
   )
@@ -45,46 +56,102 @@ export function DevicesListPage() {
     )
   }, [controls])
 
-  const visibleDevices = useMemo(
+  const filteredDevices = useMemo(
     () =>
-      devices
-        ? filterAndSortDevices(devices.items, statusFilter, sortOption)
+      devicesDataset
+        ? filterAndSortDevices(devicesDataset.items, statusFilter, sortOption)
         : [],
-    [devices, statusFilter, sortOption],
+    [devicesDataset, sortOption, statusFilter],
   )
 
-  if (devicesQuery.isLoading) {
+  const paginatedDevices = useMemo(
+    () =>
+      devicesDataset
+        ? paginateDevices(filteredDevices, currentPage, devicesDataset.pageSize)
+        : null,
+    [currentPage, devicesDataset, filteredDevices],
+  )
+
+  const pageMetadata = useMemo(
+    () =>
+      paginatedDevices && devicesDataset
+        ? {
+            page: paginatedDevices.page,
+            totalPages: paginatedDevices.totalPages,
+            pageSize: devicesDataset.pageSize,
+            totalItems: devicesDataset.totalItems,
+            matchingItems: filteredDevices.length,
+          }
+        : null,
+    [devicesDataset, filteredDevices.length, paginatedDevices],
+  )
+
+  const visibleDevices = paginatedDevices?.items ?? []
+  const hasVisibleDevices = visibleDevices.length > 0
+  const pageNumbers = useMemo(
+    () =>
+      pageMetadata
+        ? Array.from({ length: pageMetadata.totalPages }, (_, index) => index + 1)
+        : [],
+    [pageMetadata],
+  )
+
+  const setPage = useCallback(
+    (page: number) => {
+      const nextSearchParams = new URLSearchParams(searchParams)
+
+      nextSearchParams.set('page', String(page))
+      setSearchParams(nextSearchParams)
+    },
+    [searchParams, setSearchParams],
+  )
+
+  useEffect(() => {
+    if (!paginatedDevices) {
+      return
+    }
+
+    if (currentPage !== paginatedDevices.page) {
+      setPage(paginatedDevices.page)
+    }
+  }, [currentPage, paginatedDevices, setPage])
+
+  if (devicesDatasetQuery.isLoading) {
     return (
       <section className="page-shell">
         <header className="page-header">
-          <p className="page-kicker">Devices route</p>
           <h2>Devices</h2>
-          <p>Preparing the first desktop slice from server-state data.</p>
+          <p>Loading devices.</p>
         </header>
 
         <Card
           title="Loading devices"
-          description="The devices query is resolving before the desktop table is rendered."
+          description="The complete dataset is resolving before the devices list is rendered."
         />
       </section>
     )
   }
 
-  if (devicesQuery.isError) {
+  if (devicesDatasetQuery.isError) {
     return (
       <section className="page-shell">
         <header className="page-header">
-          <p className="page-kicker">Devices route</p>
           <h2>Devices</h2>
-          <p>The page is wired, but the current query result could not be resolved.</p>
+          <p>Devices could not be loaded right now.</p>
         </header>
 
         <Card
           title="Unable to load devices"
-          description="Retry the query to render the first desktop slice again."
+          description="Retry the query to resolve the full devices dataset again."
         >
           <div style={{ marginTop: '1rem' }}>
-            <Button onClick={() => devicesQuery.refetch()} size="sm" variant="secondary">
+            <Button
+              onClick={() => {
+                void devicesDatasetQuery.refetch()
+              }}
+              size="sm"
+              variant="secondary"
+            >
               Retry query
             </Button>
           </div>
@@ -93,13 +160,12 @@ export function DevicesListPage() {
     )
   }
 
-  if (!devices || devices.items.length === 0) {
+  if (!pageMetadata) {
     return (
       <section className="page-shell">
         <header className="page-header">
-          <p className="page-kicker">Devices route</p>
           <h2>Devices</h2>
-          <p>The desktop slice is ready for data, but the current list is empty.</p>
+          <p>The devices list is ready for data, but the current result is empty.</p>
         </header>
 
         <Card
@@ -113,102 +179,144 @@ export function DevicesListPage() {
   return (
     <section className="page-shell devices-page">
       <header className="page-header">
-        <p className="page-kicker">Devices route</p>
         <h2>Devices</h2>
-        <p>
-          The route currently renders one API page at a time: a query-driven device view with
-          filtering, sorting, and navigation to a parameterized device detail route.
-        </p>
+        <p>Browse devices, filter by status, and open device details.</p>
       </header>
-
-      <div className="devices-page__meta">
-        <Card
-          title="Current page"
-          description={`Query currently resolves page ${devices.page} of ${devices.totalPages}.`}
-        />
-        <Card
-          title="Rows on current page"
-          description={`${visibleDevices.length} of ${devices.items.length} rows are currently visible on page ${devices.page}.`}
-        />
-      </div>
 
       <DevicesListToolbar
         statusFilter={statusFilter}
         sortOption={sortOption}
         visibleCount={visibleDevices.length}
-        totalCount={devices.items.length}
-        onStatusFilterChange={(value) =>
+        totalCount={pageMetadata.matchingItems}
+        onStatusFilterChange={(value) => {
           setControls((current) => ({ ...current, statusFilter: value }))
-        }
-        onSortOptionChange={(value) =>
+          setPage(1)
+        }}
+        onSortOptionChange={(value) => {
           setControls((current) => ({ ...current, sortOption: value }))
-        }
+          setPage(1)
+        }}
         onReset={() => {
           setControls(defaultDevicesListControlsState)
+          setPage(1)
         }}
       />
 
-      {visibleDevices.length === 0 ? (
+      {hasVisibleDevices ? (
+        <>
+          <div className="devices-cards">
+            {visibleDevices.map((device) => (
+              <Link key={device.id} to={`/devices/${device.id}`} className="devices-card">
+                <div className="devices-card__header">
+                  <div className="devices-card__summary">
+                    <strong>{device.model}</strong>
+                    <span className="devices-card__owner">{device.ownerName}</span>
+                  </div>
+                  <StatusBadge label={formatDeviceStatus(device.status)} />
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className="devices-table-shell">
+            <table className="devices-table">
+              <thead>
+                <tr>
+                  <th scope="col">Device</th>
+                  <th scope="col">User</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Last event / updated</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleDevices.map((device) => (
+                  <tr
+                    key={device.id}
+                    className="devices-table__row"
+                    tabIndex={0}
+                    onClick={() => navigate(`/devices/${device.id}`)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault()
+                        navigate(`/devices/${device.id}`)
+                      }
+                    }}
+                  >
+                    <td>
+                      <Link to={`/devices/${device.id}`} className="devices-table__device-link">
+                        <strong>{device.model}</strong>
+                        <span className="devices-table__secondary">
+                          {device.vendor} · {device.shortId}
+                        </span>
+                      </Link>
+                    </td>
+                    <td className="devices-table__secondary">{device.ownerName}</td>
+                    <td>
+                      <StatusBadge label={formatDeviceStatus(device.status)} />
+                    </td>
+                    <td>
+                      <div className="devices-table__event">
+                        <strong>{device.lastEventLabel ?? 'No event yet'}</strong>
+                        <span className="devices-table__secondary">
+                          {formatLastEvent(device.lastEventAt)}
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      ) : (
         <Card
           title="No devices match current controls"
           description="Try a different status filter or reset the sorting/filtering controls."
         />
-      ) : null}
+      )}
 
-      <div className="devices-cards" hidden={visibleDevices.length === 0}>
-        {visibleDevices.map((device) => (
-          <Link key={device.id} to={`/devices/${device.id}`} className="devices-card">
-            <div className="devices-card__header">
-              <div className="devices-card__summary">
-                <strong>{device.model}</strong>
-                <span className="devices-card__owner">{device.ownerName}</span>
-              </div>
-              <StatusBadge label={formatDeviceStatus(device.status)} />
-            </div>
-          </Link>
-        ))}
-      </div>
+      <div className="devices-pagination" aria-label="Devices pagination">
+        <div className="devices-pagination__summary">
+          <strong>
+            Page {pageMetadata.page} of {pageMetadata.totalPages}
+          </strong>
+          <span>{pageMetadata.totalItems} devices total</span>
+        </div>
 
-      <div className="devices-table-shell" hidden={visibleDevices.length === 0}>
-        <table className="devices-table">
-          <thead>
-            <tr>
-              <th scope="col">Device</th>
-              <th scope="col">User</th>
-              <th scope="col">Status</th>
-              <th scope="col">Last event / updated</th>
-            </tr>
-          </thead>
-          <tbody>
-            {visibleDevices.map((device) => (
-              <tr key={device.id}>
-                <td>
-                  <Link
-                    to={`/devices/${device.id}`}
-                    className="devices-table__device-link"
-                  >
-                    <strong>{device.model}</strong>
-                    <span className="devices-table__secondary">
-                      {device.vendor} · {device.shortId}
-                    </span>
-                  </Link>
-                </td>
-                <td className="devices-table__secondary">{device.ownerName}</td>
-                <td>
-                  <StatusBadge label={formatDeviceStatus(device.status)} />
-                </td>
-                <td>
-                  <div className="devices-table__event">
-                    <strong>{device.lastEventLabel ?? 'No event yet'}</strong>
-                    <span className="devices-table__secondary">
-                      {formatLastEvent(device.lastEventAt)}
-                    </span>
-                  </div>
-                </td>
-              </tr>
+        <div className="devices-pagination__controls">
+          <Button
+            size="sm"
+            variant="secondary"
+            disabled={pageMetadata.page <= 1}
+            onClick={() => setPage(pageMetadata.page - 1)}
+          >
+            Previous
+          </Button>
+
+          <div className="devices-pagination__pages">
+            {pageNumbers.map((pageNumber) => (
+              <Button
+                key={pageNumber}
+                size="sm"
+                variant={pageNumber === pageMetadata.page ? 'primary' : 'secondary'}
+                className="devices-pagination__page-button"
+                onClick={() => setPage(pageNumber)}
+                aria-current={pageNumber === pageMetadata.page ? 'page' : undefined}
+              >
+                {pageNumber}
+              </Button>
             ))}
-          </tbody>
-        </table>
+          </div>
+
+          <Button
+            size="sm"
+            variant="secondary"
+            disabled={pageMetadata.page >= pageMetadata.totalPages}
+            onClick={() => setPage(pageMetadata.page + 1)}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </section>
   )

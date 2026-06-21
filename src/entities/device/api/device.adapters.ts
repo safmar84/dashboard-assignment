@@ -52,6 +52,8 @@ export function adaptDevicesIndex(input: unknown): DevicesIndex {
 
   return {
     page: dto.page ?? 1,
+    pageSize: dto.pageSize ?? dto.items.length,
+    totalItems: dto.totalItems ?? dto.items.length,
     totalPages: dto.totalPages,
     items: dto.items.map(adaptDeviceSummary),
   }
