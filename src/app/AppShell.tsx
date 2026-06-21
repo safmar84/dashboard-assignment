@@ -4,7 +4,6 @@ import './app-shell.css'
 const navigationItems = [
   { to: '/', label: 'Dashboard', end: true },
   { to: '/devices', label: 'Devices' },
-  { to: '/devices/demo-device', label: 'Device Detail' },
 ]
 
 export function AppShell() {

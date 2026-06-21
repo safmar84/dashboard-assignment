@@ -14,7 +14,8 @@ export function DevicesListPage() {
         <h2>Devices list placeholder</h2>
         <p>
           This route will host the first real vertical slice: fetched devices, desktop table,
-          mobile card view, and a small set of interactions.
+          mobile card view, and a small set of interactions. Device detail is intentionally
+          entered from a selected device, not from primary navigation.
         </p>
       </header>
 

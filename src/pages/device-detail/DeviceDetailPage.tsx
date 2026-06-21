@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 const timelinePreview = [
   { label: 'Activation', detail: 'Device enrolled successfully' },
@@ -16,9 +16,13 @@ export function DeviceDetailPage() {
         <h2>Device detail placeholder</h2>
         <p>
           This route is already parameterized. It will later render normalized device data and
-          an event timeline for <code>{deviceId ?? 'unknown-device'}</code>.
+          an event timeline for the selected device <code>{deviceId ?? 'unknown-device'}</code>.
         </p>
       </header>
+
+      <Link className="context-link" to="/devices">
+        Back to devices
+      </Link>
 
       <div className="placeholder-meta">
         <article className="placeholder-panel">
