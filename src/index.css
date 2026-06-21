@@ -4,7 +4,7 @@
   font-weight: 400;
   color: var(--color-text-primary);
   background:
-    radial-gradient(circle at top, var(--color-bg-radial), transparent 28%),
+    radial-gradient(circle 960px at top center, var(--color-bg-radial), transparent 62%),
     var(--color-bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
