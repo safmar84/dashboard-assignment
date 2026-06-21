@@ -112,6 +112,7 @@ The repository now contains:
 - mock fixtures runtime-validated with Zod on import
 - TanStack Query provider and entity query helpers over the hosted mock API
 - first real desktop `Devices List` slice with loading, error, empty, and table states
+- lightweight sorting and single status filtering on the devices screen
 - lightweight FSD-inspired folder split for `app` and `pages`
 
-The next step is to add sorting and status filtering to the devices screen.
+The next step is to add the dedicated mobile card representation for the devices screen.

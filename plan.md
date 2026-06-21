@@ -20,17 +20,17 @@
 - Done: first tests for pure data logic
 - Done: TanStack Query and server-state setup
 - Done: Devices List desktop slice
+- Done: sorting and status filtering
 
 ## Commit Plan
 
-1. Add sorting and status filtering
-2. Add mobile card representation for Devices List
-3. Add localStorage persistence for sort and filter
-4. Implement Device Detail page
-5. Implement Dashboard page
-6. Polish responsiveness and interaction ergonomics
-7. Finalize README
-8. Remove this `plan.md`
+1. Add mobile card representation for Devices List
+2. Add localStorage persistence for sort and filter
+3. Implement Device Detail page
+4. Implement Dashboard page
+5. Polish responsiveness and interaction ergonomics
+6. Finalize README
+7. Remove this `plan.md`
 
 ## Notes for Final Review
 

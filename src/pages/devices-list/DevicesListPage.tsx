@@ -1,9 +1,18 @@
 import { useQuery } from '@tanstack/react-query'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   devicesListQueryOptions,
   formatDeviceStatus,
 } from '../../entities/device'
+import {
+  defaultDevicesSortOption,
+  defaultDevicesStatusFilter,
+  filterAndSortDevices,
+  type DevicesSortOption,
+  type DevicesStatusFilter,
+} from '../../features/devices-list-controls/model/devices-list-controls'
+import { DevicesListToolbar } from '../../features/devices-list-controls/ui/DevicesListToolbar'
 import { Button } from '../../shared/ui/button/Button'
 import { Card } from '../../shared/ui/card/Card'
 import { StatusBadge } from '../../shared/ui/status-badge/StatusBadge'
@@ -25,6 +34,18 @@ function formatLastEvent(dateTime: string | null) {
 export function DevicesListPage() {
   const devicesQuery = useQuery(devicesListQueryOptions())
   const devices = devicesQuery.data
+  const [statusFilter, setStatusFilter] =
+    useState<DevicesStatusFilter>(defaultDevicesStatusFilter)
+  const [sortOption, setSortOption] =
+    useState<DevicesSortOption>(defaultDevicesSortOption)
+
+  const visibleDevices = useMemo(
+    () =>
+      devices
+        ? filterAndSortDevices(devices.items, statusFilter, sortOption)
+        : [],
+    [devices, statusFilter, sortOption],
+  )
 
   if (devicesQuery.isLoading) {
     return (
@@ -101,11 +122,31 @@ export function DevicesListPage() {
         />
         <Card
           title="Visible devices"
-          description={`${devices.items.length} rows are rendered in the desktop table slice.`}
+          description={`${visibleDevices.length} of ${devices.items.length} rows are shown in the desktop table slice.`}
         />
       </div>
 
-      <div className="devices-table-shell">
+      <DevicesListToolbar
+        statusFilter={statusFilter}
+        sortOption={sortOption}
+        visibleCount={visibleDevices.length}
+        totalCount={devices.items.length}
+        onStatusFilterChange={setStatusFilter}
+        onSortOptionChange={setSortOption}
+        onReset={() => {
+          setStatusFilter(defaultDevicesStatusFilter)
+          setSortOption(defaultDevicesSortOption)
+        }}
+      />
+
+      {visibleDevices.length === 0 ? (
+        <Card
+          title="No devices match current controls"
+          description="Try a different status filter or reset the sorting/filtering controls."
+        />
+      ) : null}
+
+      <div className="devices-table-shell" hidden={visibleDevices.length === 0}>
         <table className="devices-table">
           <thead>
             <tr>
@@ -116,7 +157,7 @@ export function DevicesListPage() {
             </tr>
           </thead>
           <tbody>
-            {devices.items.map((device) => (
+            {visibleDevices.map((device) => (
               <tr key={device.id}>
                 <td>
                   <Link
@@ -124,7 +165,9 @@ export function DevicesListPage() {
                     className="devices-table__device-link"
                   >
                     <strong>{device.model}</strong>
-                    <span className="devices-table__secondary">{device.id}</span>
+                    <span className="devices-table__secondary">
+                      {device.vendor} · {device.shortId}
+                    </span>
                   </Link>
                 </td>
                 <td className="devices-table__secondary">{device.ownerName}</td>
