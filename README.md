@@ -46,8 +46,26 @@ This project is **not** aiming for a fully mobile-first product. Instead, it aim
 - mobile layout re-prioritizes information instead of only shrinking it
 - touch ergonomics matter as much as breakpoints
 
+## Run Locally
+
+### Versions
+
+- **Node.js:** `22.15.1`
+- **Package manager:** `npm`
+
+### Commands
+
+```bash
+npm install
+npm run dev
+```
+
+Production build:
+
+```bash
+npm run build
+```
+
 ## Current Status
 
-Repository initialized. Implementation starts from a clean baseline and will be built step by step.
-
-Run instructions will be added as soon as the bootstrap commit is created.
+The repository now contains the initial Vite + React + TypeScript bootstrap. The next step is to replace the default starter UI with the first application shell and routing structure.

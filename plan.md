@@ -10,24 +10,27 @@
 - Test continuously during development
 - Add dependencies only in the commit where they are first used
 
+## Current Progress
+
+- Done: repository guidance documents (`README.md`, `AGENTS.md`, temporary `plan.md`)
+- Done: Vite + React + TypeScript bootstrap
+
 ## Commit Plan
 
-1. Bootstrap Vite + React + TypeScript project
-2. Add app shell and routing skeleton
-3. Add `AGENTS.md` and refresh `README.md` to match the real project state
-4. Add design foundations and shared primitives
-5. Add API boundary with Zod schemas and adapters
-6. Add first tests for pure data logic
-7. Add TanStack Query and server-state setup
-8. Implement Devices List desktop slice
-9. Add sorting and status filtering
-10. Add mobile card representation for Devices List
-11. Add localStorage persistence for sort and filter
-12. Implement Device Detail page
-13. Implement Dashboard page
-14. Polish responsiveness and interaction ergonomics
-15. Finalize README
-16. Remove this `plan.md`
+1. Add app shell and routing skeleton
+2. Add design foundations and shared primitives
+3. Add API boundary with Zod schemas and adapters
+4. Add first tests for pure data logic
+5. Add TanStack Query and server-state setup
+6. Implement Devices List desktop slice
+7. Add sorting and status filtering
+8. Add mobile card representation for Devices List
+9. Add localStorage persistence for sort and filter
+10. Implement Device Detail page
+11. Implement Dashboard page
+12. Polish responsiveness and interaction ergonomics
+13. Finalize README
+14. Remove this `plan.md`
 
 ## Notes for Final Review
 
