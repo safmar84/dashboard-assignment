@@ -24,13 +24,13 @@
 - Done: mobile card representation for Devices List
 - Done: localStorage persistence for devices list controls
 - Done: real Device Detail page
+- Done: real Dashboard page
 
 ## Commit Plan
 
-1. Implement Dashboard page
-2. Polish responsiveness and interaction ergonomics
-3. Finalize README
-4. Remove this `plan.md`
+1. Polish responsiveness and interaction ergonomics
+2. Finalize README
+3. Remove this `plan.md`
 
 ## Notes for Final Review
 
