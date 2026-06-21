@@ -98,6 +98,7 @@ The repository now contains:
 - initial design foundations based on shared tokens
 - shared UI primitives: `Button`, `Card`, `StatusBadge`
 - prepared API boundary with Zod schemas, endpoint config, and adapters
+- first focused adapter tests using Vitest
 - lightweight FSD-inspired folder split for `app` and `pages`
 
-The next step is to add the first tests for pure data logic and protect the new adapters.
+The next step is to add TanStack Query and wire the server-state setup.

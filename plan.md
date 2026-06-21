@@ -17,20 +17,20 @@
 - Done: app shell and routing skeleton with React Router
 - Done: design foundations and shared primitives
 - Done: API boundary with Zod schemas and adapters
+- Done: first tests for pure data logic
 
 ## Commit Plan
 
-1. Add first tests for pure data logic
-2. Add TanStack Query and server-state setup
-3. Implement Devices List desktop slice
-4. Add sorting and status filtering
-5. Add mobile card representation for Devices List
-6. Add localStorage persistence for sort and filter
-7. Implement Device Detail page
-8. Implement Dashboard page
-9. Polish responsiveness and interaction ergonomics
-10. Finalize README
-11. Remove this `plan.md`
+1. Add TanStack Query and server-state setup
+2. Implement Devices List desktop slice
+3. Add sorting and status filtering
+4. Add mobile card representation for Devices List
+5. Add localStorage persistence for sort and filter
+6. Implement Device Detail page
+7. Implement Dashboard page
+8. Polish responsiveness and interaction ergonomics
+9. Finalize README
+10. Remove this `plan.md`
 
 ## Notes for Final Review
 
