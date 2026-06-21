@@ -50,10 +50,10 @@ export function DashboardPage() {
         </header>
 
         <div className="dashboard__actions">
-          <Button onClick={() => statisticsQuery.refetch()} size="sm">
+          <Button onClick={() => statisticsQuery.refetch()} size="sm" className="dashboard__action">
             Retry query
           </Button>
-          <Button size="sm" to="/devices" variant="secondary">
+          <Button size="sm" to="/devices" variant="secondary" className="dashboard__action">
             Open devices
           </Button>
         </div>
@@ -98,7 +98,7 @@ export function DashboardPage() {
       </header>
 
       <div className="dashboard__actions">
-        <Button size="sm" to="/devices" variant="secondary">
+        <Button size="sm" to="/devices" variant="secondary" className="dashboard__action">
           Open devices
         </Button>
       </div>

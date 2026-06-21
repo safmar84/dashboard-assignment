@@ -25,12 +25,12 @@
 - Done: localStorage persistence for devices list controls
 - Done: real Device Detail page
 - Done: real Dashboard page
+- Done: responsive and interaction polish across key routes
 
 ## Commit Plan
 
-1. Polish responsiveness and interaction ergonomics
-2. Finalize README
-3. Remove this `plan.md`
+1. Finalize README
+2. Remove this `plan.md`
 
 ## Notes for Final Review
 

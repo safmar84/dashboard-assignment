@@ -35,7 +35,7 @@ export function DevicesListToolbar({
         <div className="devices-toolbar__summary">
           <strong>{visibleCount}</strong>
           <span>
-            of {totalCount} devices shown
+            of {totalCount} rows shown on this page
           </span>
         </div>
 

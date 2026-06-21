@@ -123,6 +123,14 @@
 }
 
 @media (max-width: 768px) {
+  .dashboard__actions {
+    align-items: stretch;
+  }
+
+  .dashboard__action {
+    width: 100%;
+  }
+
   .dashboard__metrics,
   .dashboard__content {
     grid-template-columns: 1fr;

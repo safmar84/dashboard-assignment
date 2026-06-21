@@ -79,6 +79,14 @@
 }
 
 @media (max-width: 768px) {
+  .device-detail__actions {
+    align-items: flex-start;
+  }
+
+  .device-detail__back-link {
+    width: 100%;
+  }
+
   .device-detail__timeline-head {
     flex-direction: column;
     align-items: flex-start;

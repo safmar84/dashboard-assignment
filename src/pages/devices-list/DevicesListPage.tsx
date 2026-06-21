@@ -116,8 +116,8 @@ export function DevicesListPage() {
         <p className="page-kicker">Devices route</p>
         <h2>Devices</h2>
         <p>
-          The first real desktop slice is now in place: a table view driven by query data, with
-          navigation to a parameterized device detail route.
+          The route currently renders one API page at a time: a query-driven device view with
+          filtering, sorting, and navigation to a parameterized device detail route.
         </p>
       </header>
 
@@ -127,8 +127,8 @@ export function DevicesListPage() {
           description={`Query currently resolves page ${devices.page} of ${devices.totalPages}.`}
         />
         <Card
-          title="Visible devices"
-          description={`${visibleDevices.length} of ${devices.items.length} rows are shown in the desktop table slice.`}
+          title="Rows on current page"
+          description={`${visibleDevices.length} of ${devices.items.length} rows are currently visible on page ${devices.page}.`}
         />
       </div>
 

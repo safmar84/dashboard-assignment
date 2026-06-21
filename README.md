@@ -117,6 +117,7 @@ The repository now contains:
 - real `Device Detail` slice with metadata cards and event timeline from the hosted API
 - real `Dashboard` slice with KPI cards and status distribution from statistics data
 - dedicated mobile card representation and collapsible controls for the devices screen
+- responsive polish across key routes, including clearer page-local devices counts and mobile action layouts
 - lightweight FSD-inspired folder split for `app` and `pages`
 
-The next step is to polish responsiveness and interaction ergonomics across the key routes.
+The next step is to finalize the README and remove the temporary in-repo plan document.

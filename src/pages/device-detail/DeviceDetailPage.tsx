@@ -41,7 +41,7 @@ export function DeviceDetailPage() {
           <p>The selected device is being resolved from the hosted API detail endpoint.</p>
         </header>
 
-        <Button to="/devices" variant="secondary">
+        <Button to="/devices" variant="secondary" className="device-detail__back-link">
           Back to devices
         </Button>
 
@@ -67,10 +67,10 @@ export function DeviceDetailPage() {
         </header>
 
         <div className="device-detail__actions">
-          <Button to="/devices" variant="secondary">
+          <Button to="/devices" variant="secondary" className="device-detail__back-link">
             Back to devices
           </Button>
-          <Button onClick={() => detailQuery.refetch()} size="sm">
+          <Button onClick={() => detailQuery.refetch()} size="sm" className="device-detail__back-link">
             Retry query
           </Button>
         </div>
@@ -95,7 +95,7 @@ export function DeviceDetailPage() {
       </header>
 
       <div className="device-detail__actions">
-        <Button to="/devices" variant="secondary">
+        <Button to="/devices" variant="secondary" className="device-detail__back-link">
           Back to devices
         </Button>
         <StatusBadge label={formatDeviceStatus(detail.status)} />
@@ -103,7 +103,7 @@ export function DeviceDetailPage() {
 
       <Card
         title={`${detail.vendor} ${detail.model}`}
-        description={`${detail.platform ?? 'Unknown platform'} · ${detail.shortId} · ${detail.id}`}
+        description={`${detail.platform ?? 'Unknown platform'} · ${detail.shortId}`}
       >
         <dl className="device-detail__facts">
           <div>
@@ -113,6 +113,10 @@ export function DeviceDetailPage() {
           <div>
             <dt>User ID</dt>
             <dd>{detail.owner.id}</dd>
+          </div>
+          <div>
+            <dt>Device ID</dt>
+            <dd>{detail.id}</dd>
           </div>
           <div>
             <dt>Events</dt>
